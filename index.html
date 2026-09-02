@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>QuickToolsHub — Free Online Tools, No Signup</title>
-<meta name="description" content="Free, fast, browser-based tools: generate QR codes, convert and compress images, and more. No signup, no uploads to a server — everything runs in your browser.">
+<title data-i18n="home.title">QuickToolsHub — Free Online Tools, No Signup</title>
+<meta name="description" content="Free, fast, browser-based tools: generate QR codes, convert and compress images, and more. No signup, no uploads to a server — everything runs in your browser." data-i18n-content="home.meta">
 <link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/">
 <meta property="og:title" content="QuickToolsHub — Free Online Tools, No Signup">
 <meta property="og:description" content="Free, fast, browser-based tools. No signup required.">
@@ -16,9 +16,10 @@
   <div class="wrap">
     <div class="brand"><span class="dot">⚡</span> QuickToolsHub</div>
     <nav class="site">
-      <a href="./index.html">Tools</a>
-      <a href="./about.html">About</a>
-      <a href="./contact.html">Contact</a>
+      <a href="./index.html" data-i18n="nav.tools">Tools</a>
+      <a href="./about.html" data-i18n="nav.about">About</a>
+      <a href="./contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
     </nav>
   </div>
 </header>
@@ -26,45 +27,45 @@
 <main>
   <div class="wrap">
     <section class="hero">
-      <h1>Free tools that just work.</h1>
-      <p>No signup, no installs, no file uploads to a server — every tool below runs entirely in your browser. Pick one and get started.</p>
+      <h1 data-i18n="home.hero.h1">Free tools that just work.</h1>
+      <p data-i18n="home.hero.p">No signup, no installs, no file uploads to a server — every tool below runs entirely in your browser. Pick one and get started.</p>
     </section>
 
     <div class="grid">
       <a class="card" href="./tools/qr-generator/index.html">
         <div class="icon">🔳</div>
-        <h3>QR Code Generator</h3>
-        <p>Turn any link or text into a downloadable QR code instantly.</p>
-        <span class="badge">Live</span>
+        <h3 data-i18n="home.card.qr.title">QR Code Generator</h3>
+        <p data-i18n="home.card.qr.desc">Turn any link or text into a downloadable QR code instantly.</p>
+        <span class="badge" data-i18n="badge.live">Live</span>
       </a>
 
       <a class="card" href="./tools/image-converter/index.html">
         <div class="icon">🖼️</div>
-        <h3>Image Converter &amp; Compressor</h3>
-        <p>Convert between PNG, JPEG and WebP, and shrink file size with a quality slider.</p>
-        <span class="badge">Live</span>
+        <h3 data-i18n="home.card.img.title">Image Converter &amp; Compressor</h3>
+        <p data-i18n="home.card.img.desc">Convert between PNG, JPEG and WebP, and shrink file size with a quality slider.</p>
+        <span class="badge" data-i18n="badge.live">Live</span>
       </a>
 
       <a class="card" href="./tools/text-case-converter/index.html">
         <div class="icon">🔤</div>
-        <h3>Text Case Converter &amp; Word Counter</h3>
-        <p>Switch text to UPPERCASE, lowercase, Title Case or Sentence case, with a live word/character count.</p>
-        <span class="badge">Live</span>
+        <h3 data-i18n="home.card.text.title">Text Case Converter &amp; Word Counter</h3>
+        <p data-i18n="home.card.text.desc">Switch text to UPPERCASE, lowercase, Title Case or Sentence case, with a live word/character count.</p>
+        <span class="badge" data-i18n="badge.live">Live</span>
       </a>
 
       <div class="card" style="opacity:.6;cursor:default">
         <div class="icon">📄</div>
-        <h3>PDF Compressor</h3>
-        <p>Shrink PDF file size without leaving your browser.</p>
-        <span class="badge soon">Coming soon</span>
+        <h3 data-i18n="home.card.pdf.title">PDF Compressor</h3>
+        <p data-i18n="home.card.pdf.desc">Shrink PDF file size without leaving your browser.</p>
+        <span class="badge soon" data-i18n="badge.soon">Coming soon</span>
       </div>
     </div>
 
-    <div class="ad-slot">Ad space (reserved — will be enabled once an ad network is approved)</div>
+    <div class="ad-slot" data-i18n="ad.slot.home">Ad space (reserved — will be enabled once an ad network is approved)</div>
 
     <section class="content">
-      <h2>Why QuickToolsHub?</h2>
-      <p>Most "free" tools online ask you to upload your files to a stranger's server. Every tool on QuickToolsHub runs entirely client-side, in your own browser, using standard web APIs — your files never leave your device. That also means the tools work instantly, with no waiting on an upload or download queue.</p>
+      <h2 data-i18n="home.content.h2">Why QuickToolsHub?</h2>
+      <p data-i18n="home.content.p">Most "free" tools online ask you to upload your files to a stranger's server. Every tool on QuickToolsHub runs entirely client-side, in your own browser, using standard web APIs — your files never leave your device. That also means the tools work instantly, with no waiting on an upload or download queue.</p>
     </section>
   </div>
 </main>
@@ -73,13 +74,14 @@
   <div class="wrap">
     <div>© <span id="y"></span> QuickToolsHub</div>
     <div>
-      <a href="./privacy-policy.html">Privacy Policy</a> ·
-      <a href="./terms.html">Terms</a> ·
-      <a href="./about.html">About</a> ·
-      <a href="./contact.html">Contact</a>
+      <a href="./privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="./terms.html" data-i18n="footer.terms">Terms</a> ·
+      <a href="./about.html" data-i18n="nav.about">About</a> ·
+      <a href="./contact.html" data-i18n="nav.contact">Contact</a>
     </div>
   </div>
 </footer>
+<script src="./assets/i18n.js"></script>
 <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>

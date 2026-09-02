@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Free Image Converter &amp; Compressor — PNG, JPEG, WebP | QuickToolsHub</title>
-<meta name="description" content="Convert images between PNG, JPEG and WebP and compress them with a quality slider, free, right in your browser. No signup, no upload to a server.">
+<title data-i18n="img.title">Free Image Converter &amp; Compressor — PNG, JPEG, WebP | QuickToolsHub</title>
+<meta name="description" content="Convert images between PNG, JPEG and WebP and compress them with a quality slider, free, right in your browser. No signup, no upload to a server." data-i18n-content="img.meta">
 <link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/image-converter/index.html">
 <link rel="stylesheet" href="../../assets/style.css">
 </head>
@@ -13,9 +13,10 @@
   <div class="wrap">
     <div class="brand"><a href="../../index.html" style="color:inherit"><span class="dot">⚡</span> QuickToolsHub</a></div>
     <nav class="site">
-      <a href="../../index.html">Tools</a>
-      <a href="../../about.html">About</a>
-      <a href="../../contact.html">Contact</a>
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
     </nav>
   </div>
 </header>
@@ -23,17 +24,25 @@
 <main>
   <div class="wrap">
     <div class="tool-panel">
-      <h1>Image Converter &amp; Compressor</h1>
-      <p class="desc">Drop an image below to convert it to PNG, JPEG or WebP, and shrink its file size with the quality slider. Everything happens locally in your browser — your image is never uploaded anywhere.</p>
+      <h1 data-i18n="img.h1">Image Converter &amp; Compressor</h1>
+      <p class="desc" data-i18n="img.desc">Drop an image below to convert it to PNG, JPEG or WebP, and shrink its file size with the quality slider. Everything happens locally in your browser — your image is never uploaded anywhere.</p>
 
       <div class="dropzone" id="dropzone">
-        <div id="dz-label">Click to choose an image, or drag &amp; drop it here</div>
+        <div id="dz-label" data-i18n="img.dz.label">Click to choose an image, or drag &amp; drop it here</div>
         <input type="file" id="file-input" accept="image/*">
+      </div>
+
+      <div class="compare-grid" id="original-preview" style="display:none;max-width:320px">
+        <div class="compare-col" style="grid-column:1 / -1">
+          <h4 data-i18n="img.compare.original">Original</h4>
+          <img id="original-img" alt="Original image preview">
+          <div class="meta" id="original-meta"></div>
+        </div>
       </div>
 
       <div class="controls" id="opts" style="display:none">
         <label>
-          Output format
+          <span data-i18n="img.label.format">Output format</span>
           <select id="fmt">
             <option value="image/jpeg">JPEG</option>
             <option value="image/webp">WebP</option>
@@ -41,35 +50,51 @@
           </select>
         </label>
         <label>
-          Quality: <span id="q-val">80</span>%
+          <span data-i18n="img.label.quality">Quality:</span> <span id="q-val">80</span>%
           <input type="range" id="quality" min="10" max="100" value="80">
         </label>
         <label>
-          Max width (px, optional)
+          <span data-i18n="img.label.maxw">Max width (px, optional)</span>
           <input type="number" id="maxw" placeholder="e.g. 1600" style="width:120px">
         </label>
-        <button id="convert-btn">Convert</button>
+        <button id="convert-btn" data-i18n="img.btn.convert">Convert</button>
       </div>
 
       <div class="result" id="result" style="display:none">
-        <p id="size-info" class="note"></p>
         <canvas id="canvas" style="display:none"></canvas>
-        <img id="preview" alt="Converted preview">
+
+        <div class="compare-grid">
+          <div class="compare-col">
+            <h4 data-i18n="img.compare.original">Original</h4>
+            <img id="compare-original-img" alt="Original image">
+            <div class="meta" id="compare-original-meta"></div>
+          </div>
+          <div class="compare-col">
+            <h4 data-i18n="img.compare.converted">Converted</h4>
+            <img id="preview" alt="Converted preview">
+            <div class="meta" id="compare-converted-meta"></div>
+          </div>
+        </div>
+
+        <div class="change-summary">
+          <span data-i18n="img.summary.label">What changed:</span> <span id="change-text"></span>
+        </div>
+
         <div class="controls">
-          <button id="download-btn">Download</button>
+          <button id="download-btn" data-i18n="img.btn.download">Download</button>
         </div>
       </div>
 
-      <p class="note">Supported input: any image type your browser can decode (PNG, JPEG, WebP, GIF, BMP). PNG output has no quality slider since PNG is lossless.</p>
+      <p class="note" data-i18n="img.note">Supported input: any image type your browser can decode (PNG, JPEG, WebP, GIF, BMP). PNG output has no quality slider since PNG is lossless.</p>
     </div>
 
-    <div class="ad-slot">Ad space (reserved)</div>
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
 
     <section class="content">
-      <h2>How it works</h2>
-      <p>The tool loads your image into an HTML canvas and re-encodes it using your browser's built-in image codecs — the same technology browsers use to render images on the web. Nothing is uploaded to a server at any point.</p>
-      <h2>When to use JPEG vs WebP vs PNG</h2>
-      <p>Use JPEG for photos where small file size matters most. Use WebP for a modern format that's usually smaller than JPEG at the same quality. Use PNG when you need transparency or lossless quality, such as for logos and screenshots with text.</p>
+      <h2 data-i18n="img.h2.how">How it works</h2>
+      <p data-i18n="img.p.how">The tool loads your image into an HTML canvas and re-encodes it using your browser's built-in image codecs — the same technology browsers use to render images on the web. Nothing is uploaded to a server at any point.</p>
+      <h2 data-i18n="img.h2.when">When to use JPEG vs WebP vs PNG</h2>
+      <p data-i18n="img.p.when">Use JPEG for photos where small file size matters most. Use WebP for a modern format that's usually smaller than JPEG at the same quality. Use PNG when you need transparency or lossless quality, such as for logos and screenshots with text.</p>
     </section>
   </div>
 </main>
@@ -78,12 +103,13 @@
   <div class="wrap">
     <div>© <span id="y"></span> QuickToolsHub</div>
     <div>
-      <a href="../../privacy-policy.html">Privacy Policy</a> ·
-      <a href="../../terms.html">Terms</a>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
     </div>
   </div>
 </footer>
 
+<script src="../../assets/i18n.js"></script>
 <script>
 document.getElementById('y').textContent = new Date().getFullYear();
 
@@ -96,12 +122,34 @@ const fmtSelect = document.getElementById('fmt');
 const canvas = document.getElementById('canvas');
 const preview = document.getElementById('preview');
 const result = document.getElementById('result');
-const sizeInfo = document.getElementById('size-info');
 const downloadBtn = document.getElementById('download-btn');
+
+const originalPreviewBlock = document.getElementById('original-preview');
+const originalImgEl = document.getElementById('original-img');
+const originalMetaEl = document.getElementById('original-meta');
+const compareOriginalImg = document.getElementById('compare-original-img');
+const compareOriginalMeta = document.getElementById('compare-original-meta');
+const compareConvertedMeta = document.getElementById('compare-converted-meta');
+const changeText = document.getElementById('change-text');
 
 let currentImg = null;
 let currentFile = null;
 let outBlobUrl = null;
+let lastResult = null; // { origW, origH, newW, newH, origKB, newKB, fromExt, toExt, quality }
+
+function fmtLabel(mime){
+  return mime === 'image/png' ? 'PNG' : (mime === 'image/webp' ? 'WebP' : 'JPEG');
+}
+function extFromMime(mime){
+  return mime === 'image/png' ? 'png' : (mime === 'image/webp' ? 'webp' : 'jpg');
+}
+function extFromFilename(name){
+  const m = /\.([a-zA-Z0-9]+)$/.exec(name || '');
+  return m ? m[1].toLowerCase() : '?';
+}
+
+function lang(){ return (window.QTH_I18N && QTH_I18N.getLang()) || 'en'; }
+function tr(key){ return (window.QTH_I18N && QTH_I18N.t(key, lang())) || key; }
 
 dropzone.addEventListener('click', ()=> fileInput.click());
 dropzone.addEventListener('dragover', (e)=>{ e.preventDefault(); dropzone.classList.add('drag'); });
@@ -117,16 +165,41 @@ fileInput.addEventListener('change', (e)=>{
 
 function loadFile(file){
   currentFile = file;
+  result.style.display = 'none';
+  lastResult = null;
   const img = new Image();
   img.onload = ()=>{
     currentImg = img;
-    document.getElementById('dz-label').textContent = file.name + ' loaded — adjust options below and click Convert';
+    document.getElementById('dz-label').textContent = file.name + ' ' + tr('img.dz.loaded');
     opts.style.display = 'flex';
+
+    const kb = (file.size/1024).toFixed(1);
+    originalImgEl.src = img.src;
+    originalMetaEl.textContent = `${img.naturalWidth}×${img.naturalHeight} · ${kb} KB · ${extFromFilename(file.name).toUpperCase()}`;
+    originalPreviewBlock.style.display = 'grid';
   };
   img.src = URL.createObjectURL(file);
 }
 
 qualityInput.addEventListener('input', ()=>{ qVal.textContent = qualityInput.value; });
+
+function renderChangeSummary(){
+  if(!lastResult) return;
+  const r = lastResult;
+  const pct = (100 - (r.newKB/r.origKB*100));
+  const sizeWord = pct >= 0 ? tr('img.summary.smaller') : tr('img.summary.larger');
+  const dimsChanged = r.origW !== r.newW || r.origH !== r.newH;
+  const parts = [];
+  parts.push(`${tr('img.summary.format')}: ${r.fromExt.toUpperCase()} → ${r.toExt.toUpperCase()}`);
+  if(r.quality !== null) parts.push(`${tr('img.summary.quality')}: ${r.quality}%`);
+  parts.push(`${tr('img.summary.dimensions')}: ${r.origW}×${r.origH} → ${r.newW}×${r.newH}` + (dimsChanged ? '' : ` (${tr('img.summary.unchanged')})`));
+  parts.push(`${tr('img.summary.filesize')}: ${r.origKB} KB → ${r.newKB} KB (${Math.abs(pct).toFixed(0)}% ${sizeWord})`);
+  changeText.textContent = parts.join(' · ');
+
+  compareOriginalMeta.textContent = `${r.origW}×${r.origH} · ${r.origKB} KB`;
+  compareConvertedMeta.textContent = `${r.newW}×${r.newH} · ${r.newKB} KB`;
+}
+document.addEventListener('qth-lang-changed', renderChangeSummary);
 
 document.getElementById('convert-btn').addEventListener('click', ()=>{
   if(!currentImg) return;
@@ -142,23 +215,35 @@ document.getElementById('convert-btn').addEventListener('click', ()=>{
   ctx.drawImage(currentImg, 0, 0, w, h);
 
   const fmt = fmtSelect.value;
-  const quality = fmt === 'image/png' ? undefined : (parseInt(qualityInput.value,10)/100);
+  const isPng = fmt === 'image/png';
+  const qualityPct = isPng ? null : parseInt(qualityInput.value,10);
+  const quality = isPng ? undefined : (qualityPct/100);
 
   canvas.toBlob((blob)=>{
     if(!blob) return;
     if(outBlobUrl) URL.revokeObjectURL(outBlobUrl);
     outBlobUrl = URL.createObjectURL(blob);
     preview.src = outBlobUrl;
+    compareOriginalImg.src = currentImg.src;
     result.style.display = 'block';
-    const origKB = (currentFile.size/1024).toFixed(1);
-    const newKB = (blob.size/1024).toFixed(1);
-    const pct = (100 - (blob.size/currentFile.size*100)).toFixed(0);
-    sizeInfo.textContent = `Original: ${origKB} KB → Converted: ${newKB} KB` + (blob.size < currentFile.size ? ` (${pct}% smaller)` : '');
+
+    lastResult = {
+      origW: currentImg.naturalWidth,
+      origH: currentImg.naturalHeight,
+      newW: w,
+      newH: h,
+      origKB: (currentFile.size/1024).toFixed(1),
+      newKB: (blob.size/1024).toFixed(1),
+      fromExt: extFromFilename(currentFile.name),
+      toExt: extFromMime(fmt),
+      quality: qualityPct
+    };
+    renderChangeSummary();
+
     downloadBtn.onclick = ()=>{
       const a = document.createElement('a');
-      const ext = fmt === 'image/png' ? 'png' : (fmt === 'image/webp' ? 'webp' : 'jpg');
       a.href = outBlobUrl;
-      a.download = 'converted.' + ext;
+      a.download = 'converted.' + extFromMime(fmt);
       document.body.appendChild(a);
       a.click();
       a.remove();

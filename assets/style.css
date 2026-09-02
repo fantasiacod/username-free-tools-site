@@ -29,9 +29,24 @@ header.site{
 header.site .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .brand{font-weight:700;font-size:20px;color:var(--text);display:flex;align-items:center;gap:8px}
 .brand span.dot{color:var(--accent)}
-nav.site a{color:var(--muted);margin-left:18px;font-size:14px}
-nav.site a:first-child{margin-left:0}
+nav.site{display:flex;align-items:center;flex-wrap:wrap}
+nav.site a{color:var(--muted);margin-inline-start:18px;font-size:14px}
+nav.site a:first-child{margin-inline-start:0}
 nav.site a:hover{color:var(--text)}
+#lang-toggle{
+  margin-inline-start:18px;
+  background:var(--panel-2);
+  border:1px solid var(--border);
+  color:var(--text);
+  font-size:13px;
+  padding:6px 12px;
+  border-radius:999px;
+  cursor:pointer;
+}
+#lang-toggle:hover{border-color:var(--accent)}
+
+html[dir="rtl"] body{font-family:"Segoe UI",Tahoma,Arial,"Noto Sans Arabic",sans-serif}
+html[dir="rtl"] .content{text-align:right}
 
 main{padding:40px 0 60px}
 .hero{padding:30px 0 10px}
@@ -101,6 +116,36 @@ button.secondary{background:var(--panel-2);border:1px solid var(--border);color:
 .result{margin-top:24px}
 .result img{max-width:100%;border-radius:8px;border:1px solid var(--border)}
 .result canvas{max-width:100%;border-radius:8px;border:1px solid var(--border)}
+
+.compare-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-top:14px;
+}
+.compare-col{
+  background:var(--panel-2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px;
+  text-align:center;
+}
+.compare-col h4{margin:0 0 8px;font-size:13px;color:var(--muted);font-weight:600}
+.compare-col img{max-width:100%;max-height:260px;object-fit:contain;border-radius:6px;border:1px solid var(--border);background:#0b0d11}
+.compare-col .meta{margin-top:8px;font-size:12px;color:var(--muted)}
+.change-summary{
+  margin-top:16px;
+  background:var(--panel-2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 14px;
+  font-size:13.5px;
+  color:var(--text);
+}
+.change-summary b{color:var(--accent-2)}
+@media (max-width:560px){
+  .compare-grid{grid-template-columns:1fr}
+}
 
 .note{font-size:12.5px;color:var(--muted);margin-top:18px}
 

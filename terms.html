@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Terms of Use — QuickToolsHub</title>
-<meta name="description" content="Terms of use for QuickToolsHub's free online tools.">
+<title data-i18n="terms.title">Terms of Use — QuickToolsHub</title>
+<meta name="description" content="Terms of use for QuickToolsHub's free online tools." data-i18n-content="terms.meta">
 <link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/terms.html">
 <link rel="stylesheet" href="./assets/style.css">
 </head>
@@ -13,24 +13,25 @@
   <div class="wrap">
     <div class="brand"><a href="./index.html" style="color:inherit"><span class="dot">⚡</span> QuickToolsHub</a></div>
     <nav class="site">
-      <a href="./index.html">Tools</a>
-      <a href="./about.html">About</a>
-      <a href="./contact.html">Contact</a>
+      <a href="./index.html" data-i18n="nav.tools">Tools</a>
+      <a href="./about.html" data-i18n="nav.about">About</a>
+      <a href="./contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
     </nav>
   </div>
 </header>
 <main>
   <div class="wrap">
     <div class="tool-panel">
-      <h1>Terms of Use</h1>
+      <h1 data-i18n="terms.h1">Terms of Use</h1>
       <div class="content">
-        <p>By using QuickToolsHub, you agree to the following:</p>
-        <h2>Use at your own risk</h2>
-        <p>Tools are provided "as is", free of charge, with no warranty of any kind. While every effort is made to keep them working correctly, we are not liable for any loss or damage resulting from their use.</p>
-        <h2>Acceptable use</h2>
-        <p>Don't use this site's tools for unlawful purposes or to process content you don't have the rights to.</p>
-        <h2>Changes</h2>
-        <p>These terms and the site's tools may change or be discontinued at any time without notice.</p>
+        <p data-i18n="terms.intro">By using QuickToolsHub, you agree to the following:</p>
+        <h2 data-i18n="terms.h2.risk">Use at your own risk</h2>
+        <p data-i18n="terms.p.risk">Tools are provided "as is", free of charge, with no warranty of any kind. While every effort is made to keep them working correctly, we are not liable for any loss or damage resulting from their use.</p>
+        <h2 data-i18n="terms.h2.use">Acceptable use</h2>
+        <p data-i18n="terms.p.use">Don't use this site's tools for unlawful purposes or to process content you don't have the rights to.</p>
+        <h2 data-i18n="terms.h2.changes">Changes</h2>
+        <p data-i18n="terms.p.changes">These terms and the site's tools may change or be discontinued at any time without notice.</p>
       </div>
     </div>
   </div>
@@ -38,9 +39,10 @@
 <footer class="site">
   <div class="wrap">
     <div>© <span id="y"></span> QuickToolsHub</div>
-    <div><a href="./privacy-policy.html">Privacy Policy</a> · <a href="./terms.html">Terms</a></div>
+    <div><a href="./privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> · <a href="./terms.html" data-i18n="footer.terms">Terms</a></div>
   </div>
 </footer>
+<script src="./assets/i18n.js"></script>
 <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>

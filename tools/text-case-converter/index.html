@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Free Text Case Converter &amp; Word Counter | QuickToolsHub</title>
-<meta name="description" content="Convert text to UPPERCASE, lowercase, Title Case or Sentence case, with a live word and character counter. Free, instant, runs entirely in your browser.">
+<title data-i18n="text.title">Free Text Case Converter &amp; Word Counter | QuickToolsHub</title>
+<meta name="description" content="Convert text to UPPERCASE, lowercase, Title Case or Sentence case, with a live word and character counter. Free, instant, runs entirely in your browser." data-i18n-content="text.meta">
 <link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/text-case-converter/index.html">
 <link rel="stylesheet" href="../../assets/style.css">
 </head>
@@ -13,9 +13,10 @@
   <div class="wrap">
     <div class="brand"><a href="../../index.html" style="color:inherit"><span class="dot">⚡</span> QuickToolsHub</a></div>
     <nav class="site">
-      <a href="../../index.html">Tools</a>
-      <a href="../../about.html">About</a>
-      <a href="../../contact.html">Contact</a>
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
     </nav>
   </div>
 </header>
@@ -23,30 +24,30 @@
 <main>
   <div class="wrap">
     <div class="tool-panel">
-      <h1>Text Case Converter &amp; Word Counter</h1>
-      <p class="desc">Paste or type your text below. Convert it to any case with one click, and see the word/character count update live as you type. Nothing you type is sent anywhere.</p>
+      <h1 data-i18n="text.h1">Text Case Converter &amp; Word Counter</h1>
+      <p class="desc" data-i18n="text.desc">Paste or type your text below. Convert it to any case with one click, and see the word/character count update live as you type. Nothing you type is sent anywhere.</p>
 
-      <textarea id="text-input" placeholder="Type or paste your text here..." style="width:100%;min-height:180px;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:14px;font-size:14.5px;font-family:inherit;resize:vertical"></textarea>
+      <textarea id="text-input" placeholder="Type or paste your text here..." data-i18n-placeholder="text.placeholder" style="width:100%;min-height:180px;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:14px;font-size:14.5px;font-family:inherit;resize:vertical"></textarea>
 
       <div class="controls">
-        <button id="btn-upper">UPPERCASE</button>
-        <button id="btn-lower">lowercase</button>
-        <button id="btn-title">Title Case</button>
-        <button id="btn-sentence">Sentence case</button>
-        <button id="btn-copy" class="secondary">Copy</button>
-        <button id="btn-clear" class="secondary">Clear</button>
+        <button id="btn-upper" data-i18n="text.btn.upper">UPPERCASE</button>
+        <button id="btn-lower" data-i18n="text.btn.lower">lowercase</button>
+        <button id="btn-title" data-i18n="text.btn.title">Title Case</button>
+        <button id="btn-sentence" data-i18n="text.btn.sentence">Sentence case</button>
+        <button id="btn-copy" class="secondary" data-i18n="text.btn.copy">Copy</button>
+        <button id="btn-clear" class="secondary" data-i18n="text.btn.clear">Clear</button>
       </div>
 
       <p class="note" id="stats">0 words · 0 characters · 0 characters (no spaces) · 0 sentences</p>
     </div>
 
-    <div class="ad-slot">Ad space (reserved)</div>
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
 
     <section class="content">
-      <h2>Why use a case converter?</h2>
-      <p>Retyping text to fix its capitalization is slow and error-prone. This tool instantly reformats any block of text — a title you want in Title Case, an accidentally-caps-locked paragraph, or a heading you need in Sentence case — without you having to type it again.</p>
-      <h2>How the word counter works</h2>
-      <p>The counter updates live as you type or paste, and also after each case conversion. Word count splits on whitespace, character counts include and exclude spaces, and sentence count is an approximate count based on sentence-ending punctuation (., !, ?).</p>
+      <h2 data-i18n="text.h2.why">Why use a case converter?</h2>
+      <p data-i18n="text.p.why">Retyping text to fix its capitalization is slow and error-prone. This tool instantly reformats any block of text — a title you want in Title Case, an accidentally-caps-locked paragraph, or a heading you need in Sentence case — without you having to type it again.</p>
+      <h2 data-i18n="text.h2.counter">How the word counter works</h2>
+      <p data-i18n="text.p.counter">The counter updates live as you type or paste, and also after each case conversion. Word count splits on whitespace, character counts include and exclude spaces, and sentence count is an approximate count based on sentence-ending punctuation (., !, ?).</p>
     </section>
   </div>
 </main>
@@ -55,12 +56,13 @@
   <div class="wrap">
     <div>© <span id="y"></span> QuickToolsHub</div>
     <div>
-      <a href="../../privacy-policy.html">Privacy Policy</a> ·
-      <a href="../../terms.html">Terms</a>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
     </div>
   </div>
 </footer>
 
+<script src="../../assets/i18n.js"></script>
 <script>
 document.getElementById('y').textContent = new Date().getFullYear();
 
@@ -74,10 +76,18 @@ function updateStats(){
   const chars = text.length;
   const charsNoSpaces = text.replace(/\s/g, '').length;
   const sentences = trimmed.length ? (trimmed.match(/[.!?]+(\s|$)/g) || []).length || (trimmed ? 1 : 0) : 0;
-  stats.textContent = `${words} words · ${chars} characters · ${charsNoSpaces} characters (no spaces) · ${sentences} sentences`;
+
+  const lang = (window.QTH_I18N && QTH_I18N.getLang()) || 'en';
+  const template = (window.QTH_I18N && QTH_I18N.t('text.stats', lang)) || '{words} words · {chars} characters · {charsNoSpaces} characters (no spaces) · {sentences} sentences';
+  stats.textContent = template
+    .replace('{words}', words)
+    .replace('{chars}', chars)
+    .replace('{charsNoSpaces}', charsNoSpaces)
+    .replace('{sentences}', sentences);
 }
 
 input.addEventListener('input', updateStats);
+document.addEventListener('qth-lang-changed', updateStats);
 
 document.getElementById('btn-upper').addEventListener('click', ()=>{
   input.value = input.value.toUpperCase();

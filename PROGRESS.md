@@ -4,6 +4,13 @@ Append a new dated entry at the top each time work is done. Keep entries short a
 
 ---
 
+### 2026-09-02 — Bilingual (EN/AR) support + image tool preview/compare
+- Added `assets/i18n.js`: a small client-side i18n system (English/Arabic dictionary, `data-i18n`/`data-i18n-content`/`data-i18n-placeholder` attributes, `#lang-toggle` button, persists choice in `localStorage`, flips `<html dir>` to `rtl` for Arabic). Applied it across every existing page (homepage, about, contact, privacy, terms, and all 3 tools).
+- Validated coverage with a Node script that loads `assets/i18n.js` in a `vm` sandbox and diffs every `data-i18n*` key found across the `.html` files against the `en`/`ar` dictionaries — zero missing keys.
+- Smoke-tested every page with Playwright (headless Chromium): page loads with no console errors, `#lang-toggle` correctly flips `dir="rtl"` and swaps visible text.
+- Image Converter & Compressor: now shows an original-image preview (thumbnail, dimensions, file size, format) immediately after upload, and after conversion shows a side-by-side before/after comparison plus a "what changed" summary line (format, quality, dimensions, file size delta with %), fully translated and re-rendered on language toggle.
+- Added an i18n convention + a verification checklist to `ROADMAP.md` so future tools (built by the daily automated session) stay bilingual and get sanity-checked before commit.
+
 ### 2026-09-02 — Site went live + 3rd tool shipped
 - Repo made public and GitHub Pages enabled (Deploy from branch: `main` / root). Site confirmed live at https://fantasiacod.github.io/username-free-tools-site/.
 - Shipped a 3rd tool: Text Case Converter & Word Counter (`tools/text-case-converter/index.html`) — UPPERCASE/lowercase/Title Case/Sentence case buttons, copy/clear, and a live word/character/sentence counter. Pure JS, no dependencies.
