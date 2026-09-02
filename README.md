@@ -1,13 +1,16 @@
-# QuickToolsHub
+# Code Engineer (مهندس كود)
 
 A small collection of free, browser-based tools (QR code generator, image
 converter/compressor, and more being added over time). Static site, no
-backend, no build step — hosted on GitHub Pages.
+backend, no build step — hosted on GitHub Pages. Bilingual (English/Arabic)
+via a client-side toggle.
 
 ## Structure
 - `index.html` — homepage / tool directory
 - `tools/<tool-name>/index.html` — one folder per tool
 - `assets/style.css` — shared stylesheet used by every page
+- `assets/i18n.js` — English/Arabic dictionary + language toggle (`#lang-toggle`)
+- `assets/logo-icon.png`, `favicon.ico`, `favicon-*.png` — brand logo and favicons
 - `about.html`, `contact.html`, `privacy-policy.html`, `terms.html` — trust/policy pages
 - `robots.txt`, `sitemap.xml` — SEO basics
 - `ROADMAP.md` — task queue for what to build/improve next (read this first)

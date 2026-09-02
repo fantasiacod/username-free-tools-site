@@ -41,3 +41,4 @@ a daily scheduled task (see `PROGRESS.md` for the log of what's already been don
 - [x] Added 3rd tool: Text Case Converter & Word Counter (`tools/text-case-converter/`) — live, linked from homepage and sitemap.
 - [x] Added bilingual English/Arabic support site-wide via `assets/i18n.js` (client-side toggle, RTL-aware) — every existing page converted, `#lang-toggle` button in every header.
 - [x] Image Converter & Compressor: added an original-image preview on upload, and a before/after comparison (side-by-side images + a "what changed" summary covering format, quality, dimensions and file size) after conversion.
+- [x] Rebranded to "Code Engineer" / "مهندس كود" with a real logo (owner-supplied image, cropped to a circular icon) as favicon + header logo across every page. Brand name is now translatable via the `brand.name` i18n key — keep using that key (never hardcode the brand name) in any new page.

@@ -4,6 +4,12 @@ Append a new dated entry at the top each time work is done. Keep entries short a
 
 ---
 
+### 2026-09-02 — Rebrand to "Code Engineer" / "مهندس كود" + real logo
+- Site owner supplied a logo image ("مهندس كود / CODE ENGINEER", a gear+dollar-sign mark). Cropped it down to just the circular gear icon (transparent background) and generated `assets/logo-icon.png` plus `favicon.ico` / `favicon-32.png` / `favicon-180.png` / `favicon-512.png`, linked from every page's `<head>`.
+- Renamed the brand everywhere from "QuickToolsHub" to **"Code Engineer"** (English) / **"مهندس كود"** (Arabic) via a new `brand.name` i18n key — header logo+name, footer copyright, all page titles/meta, README. The name now correctly switches with the language toggle (verified: browser tab title and header text both flip EN↔AR on `#lang-toggle`).
+- Re-ran the i18n key-coverage check, JS syntax check, tag-balance check, and a Playwright smoke test (logo image loads, title/brand swap language, no console errors, RTL header layout looks correct) before committing.
+
+
 ### 2026-09-02 — Bilingual (EN/AR) support + image tool preview/compare
 - Added `assets/i18n.js`: a small client-side i18n system (English/Arabic dictionary, `data-i18n`/`data-i18n-content`/`data-i18n-placeholder` attributes, `#lang-toggle` button, persists choice in `localStorage`, flips `<html dir>` to `rtl` for Arabic). Applied it across every existing page (homepage, about, contact, privacy, terms, and all 3 tools).
 - Validated coverage with a Node script that loads `assets/i18n.js` in a `vm` sandbox and diffs every `data-i18n*` key found across the `.html` files against the `en`/`ar` dictionaries — zero missing keys.
