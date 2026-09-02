@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Image Converter &amp; Compressor — PNG, JPEG, WebP | QuickToolsHub</title>
+<meta name="description" content="Convert images between PNG, JPEG and WebP and compress them with a quality slider, free, right in your browser. No signup, no upload to a server.">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/image-converter/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit"><span class="dot">⚡</span> QuickToolsHub</a></div>
+    <nav class="site">
+      <a href="../../index.html">Tools</a>
+      <a href="../../about.html">About</a>
+      <a href="../../contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1>Image Converter &amp; Compressor</h1>
+      <p class="desc">Drop an image below to convert it to PNG, JPEG or WebP, and shrink its file size with the quality slider. Everything happens locally in your browser — your image is never uploaded anywhere.</p>
+
+      <div class="dropzone" id="dropzone">
+        <div id="dz-label">Click to choose an image, or drag &amp; drop it here</div>
+        <input type="file" id="file-input" accept="image/*">
+      </div>
+
+      <div class="controls" id="opts" style="display:none">
+        <label>
+          Output format
+          <select id="fmt">
+            <option value="image/jpeg">JPEG</option>
+            <option value="image/webp">WebP</option>
+            <option value="image/png">PNG</option>
+          </select>
+        </label>
+        <label>
+          Quality: <span id="q-val">80</span>%
+          <input type="range" id="quality" min="10" max="100" value="80">
+        </label>
+        <label>
+          Max width (px, optional)
+          <input type="number" id="maxw" placeholder="e.g. 1600" style="width:120px">
+        </label>
+        <button id="convert-btn">Convert</button>
+      </div>
+
+      <div class="result" id="result" style="display:none">
+        <p id="size-info" class="note"></p>
+        <canvas id="canvas" style="display:none"></canvas>
+        <img id="preview" alt="Converted preview">
+        <div class="controls">
+          <button id="download-btn">Download</button>
+        </div>
+      </div>
+
+      <p class="note">Supported input: any image type your browser can decode (PNG, JPEG, WebP, GIF, BMP). PNG output has no quality slider since PNG is lossless.</p>
+    </div>
+
+    <div class="ad-slot">Ad space (reserved)</div>
+
+    <section class="content">
+      <h2>How it works</h2>
+      <p>The tool loads your image into an HTML canvas and re-encodes it using your browser's built-in image codecs — the same technology browsers use to render images on the web. Nothing is uploaded to a server at any point.</p>
+      <h2>When to use JPEG vs WebP vs PNG</h2>
+      <p>Use JPEG for photos where small file size matters most. Use WebP for a modern format that's usually smaller than JPEG at the same quality. Use PNG when you need transparency or lossless quality, such as for logos and screenshots with text.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> QuickToolsHub</div>
+    <div>
+      <a href="../../privacy-policy.html">Privacy Policy</a> ·
+      <a href="../../terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('file-input');
+const opts = document.getElementById('opts');
+const qualityInput = document.getElementById('quality');
+const qVal = document.getElementById('q-val');
+const fmtSelect = document.getElementById('fmt');
+const canvas = document.getElementById('canvas');
+const preview = document.getElementById('preview');
+const result = document.getElementById('result');
+const sizeInfo = document.getElementById('size-info');
+const downloadBtn = document.getElementById('download-btn');
+
+let currentImg = null;
+let currentFile = null;
+let outBlobUrl = null;
+
+dropzone.addEventListener('click', ()=> fileInput.click());
+dropzone.addEventListener('dragover', (e)=>{ e.preventDefault(); dropzone.classList.add('drag'); });
+dropzone.addEventListener('dragleave', ()=> dropzone.classList.remove('drag'));
+dropzone.addEventListener('drop', (e)=>{
+  e.preventDefault();
+  dropzone.classList.remove('drag');
+  if(e.dataTransfer.files.length) loadFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', (e)=>{
+  if(e.target.files.length) loadFile(e.target.files[0]);
+});
+
+function loadFile(file){
+  currentFile = file;
+  const img = new Image();
+  img.onload = ()=>{
+    currentImg = img;
+    document.getElementById('dz-label').textContent = file.name + ' loaded — adjust options below and click Convert';
+    opts.style.display = 'flex';
+  };
+  img.src = URL.createObjectURL(file);
+}
+
+qualityInput.addEventListener('input', ()=>{ qVal.textContent = qualityInput.value; });
+
+document.getElementById('convert-btn').addEventListener('click', ()=>{
+  if(!currentImg) return;
+  let w = currentImg.naturalWidth, h = currentImg.naturalHeight;
+  const maxw = parseInt(document.getElementById('maxw').value, 10);
+  if(maxw && maxw > 0 && w > maxw){
+    h = Math.round(h * (maxw / w));
+    w = maxw;
+  }
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,w,h);
+  ctx.drawImage(currentImg, 0, 0, w, h);
+
+  const fmt = fmtSelect.value;
+  const quality = fmt === 'image/png' ? undefined : (parseInt(qualityInput.value,10)/100);
+
+  canvas.toBlob((blob)=>{
+    if(!blob) return;
+    if(outBlobUrl) URL.revokeObjectURL(outBlobUrl);
+    outBlobUrl = URL.createObjectURL(blob);
+    preview.src = outBlobUrl;
+    result.style.display = 'block';
+    const origKB = (currentFile.size/1024).toFixed(1);
+    const newKB = (blob.size/1024).toFixed(1);
+    const pct = (100 - (blob.size/currentFile.size*100)).toFixed(0);
+    sizeInfo.textContent = `Original: ${origKB} KB → Converted: ${newKB} KB` + (blob.size < currentFile.size ? ` (${pct}% smaller)` : '');
+    downloadBtn.onclick = ()=>{
+      const a = document.createElement('a');
+      const ext = fmt === 'image/png' ? 'png' : (fmt === 'image/webp' ? 'webp' : 'jpg');
+      a.href = outBlobUrl;
+      a.download = 'converted.' + ext;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    };
+  }, fmt, quality);
+});
+</script>
+</body>
+</html>

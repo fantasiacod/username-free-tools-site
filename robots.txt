@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fantasiacod.github.io/username-free-tools-site/sitemap.xml

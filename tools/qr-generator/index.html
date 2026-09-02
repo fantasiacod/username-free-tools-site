@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free QR Code Generator — No Signup | QuickToolsHub</title>
+<meta name="description" content="Generate a QR code from any link or text for free, right in your browser. Download as PNG instantly. No signup, no watermark.">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/qr-generator/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit"><span class="dot">⚡</span> QuickToolsHub</a></div>
+    <nav class="site">
+      <a href="../../index.html">Tools</a>
+      <a href="../../about.html">About</a>
+      <a href="../../contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1>QR Code Generator</h1>
+      <p class="desc">Type or paste any link or text below. Your QR code is generated instantly and entirely in your browser — nothing is sent anywhere.</p>
+
+      <div class="controls" style="display:block">
+        <label style="width:100%;max-width:480px">
+          Text or URL
+          <input type="text" id="qr-text" placeholder="https://example.com" style="width:100%">
+        </label>
+      </div>
+
+      <div class="controls">
+        <label>
+          Size
+          <select id="qr-size">
+            <option value="200">200 × 200</option>
+            <option value="300" selected>300 × 300</option>
+            <option value="500">500 × 500</option>
+            <option value="800">800 × 800</option>
+          </select>
+        </label>
+        <button id="generate-btn">Generate</button>
+        <button id="download-btn" class="secondary" disabled>Download PNG</button>
+      </div>
+
+      <div class="result">
+        <div id="qr-output"></div>
+      </div>
+
+      <p class="note">Tip: this tool works offline once the page is loaded — no data about the text you enter is transmitted anywhere.</p>
+    </div>
+
+    <div class="ad-slot">Ad space (reserved)</div>
+
+    <section class="content">
+      <h2>How it works</h2>
+      <p>This generator uses the open-source QRCode.js library running locally in your browser to encode your text into a QR code image. Because everything happens client-side, there's no server round-trip and no limit on how many codes you generate.</p>
+      <h2>Common uses</h2>
+      <p>Share a Wi-Fi password, link to a menu or portfolio, add a QR code to a business card or flyer, or quickly transfer a link from desktop to phone by scanning.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> QuickToolsHub</div>
+    <div>
+      <a href="../../privacy-policy.html">Privacy Policy</a> ·
+      <a href="../../terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+const output = document.getElementById('qr-output');
+const downloadBtn = document.getElementById('download-btn');
+let qr = null;
+
+function generate(){
+  const text = document.getElementById('qr-text').value.trim() || 'https://example.com';
+  const size = parseInt(document.getElementById('qr-size').value, 10);
+  output.innerHTML = '';
+  qr = new QRCode(output, {
+    text: text,
+    width: size,
+    height: size,
+    correctLevel: QRCode.CorrectLevel.M
+  });
+  setTimeout(()=>{ downloadBtn.disabled = false; }, 150);
+}
+
+document.getElementById('generate-btn').addEventListener('click', generate);
+document.getElementById('qr-text').addEventListener('keydown', (e)=>{ if(e.key==='Enter') generate(); });
+
+downloadBtn.addEventListener('click', ()=>{
+  const img = output.querySelector('img');
+  const canvas = output.querySelector('canvas');
+  const src = img ? img.src : (canvas ? canvas.toDataURL('image/png') : null);
+  if(!src) return;
+  const a = document.createElement('a');
+  a.href = src;
+  a.download = 'qrcode.png';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+});
+
+generate();
+</script>
+</body>
+</html>
