@@ -16,7 +16,6 @@ a daily scheduled task (see `PROGRESS.md` for the log of what's already been don
 
 ## Next up (in priority order)
 
-- [ ] Add a 3rd tool: **Text Case / Word Counter** (uppercase/lowercase/title case converter + live word & character count). Pure JS, no library needed.
 - [ ] Add a 4th tool: **Password Generator** (length slider, character-set checkboxes, copy-to-clipboard). Pure JS.
 - [ ] Add a 5th tool: **PDF Compressor** using `pdf-lib` via CDN (https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js) — re-save/re-encode embedded images at lower quality to shrink file size. This is more involved; it's fine to ship a first version that only strips metadata and re-saves, then improve compression in a later increment.
 - [ ] Add a 6th tool: **Image Resizer** (dedicated, simpler UI than the converter — just width/height/aspect-ratio lock and download).
@@ -32,8 +31,9 @@ a daily scheduled task (see `PROGRESS.md` for the log of what's already been don
 - [ ] Once traffic grows, apply for Google AdSense (requires some real traffic + the policy pages, which already exist: privacy-policy.html, terms.html, about.html, contact.html).
 - [ ] Create a Gumroad product for a "Pro" tier (idea: remove the reserved ad space + unlock a couple of extra tool options, sold as a one-time small purchase or "pay what you want"). Share the Gumroad product link so it can be wired into a "Go Pro" button.
 - [ ] (Optional, later) Buy a short custom domain once there's some traffic, and point it at GitHub Pages via a CNAME file — improves trust/SEO and ad network approval odds vs. the default github.io subdomain.
-- [ ] Enable GitHub Pages in the repo settings if it isn't already serving at the expected URL (Settings → Pages → Source: Deploy from branch → `main` / root).
 
 ## Done
 
 - [x] Initial site scaffold: homepage, QR Code Generator (live), Image Converter & Compressor (live), About/Contact/Privacy/Terms pages, robots.txt, sitemap.xml.
+- [x] Repo made public and GitHub Pages enabled — site is live at https://fantasiacod.github.io/username-free-tools-site/
+- [x] Added 3rd tool: Text Case Converter & Word Counter (`tools/text-case-converter/`) — live, linked from homepage and sitemap.

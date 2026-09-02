@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Text Case Converter &amp; Word Counter | QuickToolsHub</title>
+<meta name="description" content="Convert text to UPPERCASE, lowercase, Title Case or Sentence case, with a live word and character counter. Free, instant, runs entirely in your browser.">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/text-case-converter/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit"><span class="dot">⚡</span> QuickToolsHub</a></div>
+    <nav class="site">
+      <a href="../../index.html">Tools</a>
+      <a href="../../about.html">About</a>
+      <a href="../../contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1>Text Case Converter &amp; Word Counter</h1>
+      <p class="desc">Paste or type your text below. Convert it to any case with one click, and see the word/character count update live as you type. Nothing you type is sent anywhere.</p>
+
+      <textarea id="text-input" placeholder="Type or paste your text here..." style="width:100%;min-height:180px;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:14px;font-size:14.5px;font-family:inherit;resize:vertical"></textarea>
+
+      <div class="controls">
+        <button id="btn-upper">UPPERCASE</button>
+        <button id="btn-lower">lowercase</button>
+        <button id="btn-title">Title Case</button>
+        <button id="btn-sentence">Sentence case</button>
+        <button id="btn-copy" class="secondary">Copy</button>
+        <button id="btn-clear" class="secondary">Clear</button>
+      </div>
+
+      <p class="note" id="stats">0 words · 0 characters · 0 characters (no spaces) · 0 sentences</p>
+    </div>
+
+    <div class="ad-slot">Ad space (reserved)</div>
+
+    <section class="content">
+      <h2>Why use a case converter?</h2>
+      <p>Retyping text to fix its capitalization is slow and error-prone. This tool instantly reformats any block of text — a title you want in Title Case, an accidentally-caps-locked paragraph, or a heading you need in Sentence case — without you having to type it again.</p>
+      <h2>How the word counter works</h2>
+      <p>The counter updates live as you type or paste, and also after each case conversion. Word count splits on whitespace, character counts include and exclude spaces, and sentence count is an approximate count based on sentence-ending punctuation (., !, ?).</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> QuickToolsHub</div>
+    <div>
+      <a href="../../privacy-policy.html">Privacy Policy</a> ·
+      <a href="../../terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+const input = document.getElementById('text-input');
+const stats = document.getElementById('stats');
+
+function updateStats(){
+  const text = input.value;
+  const trimmed = text.trim();
+  const words = trimmed.length ? trimmed.split(/\s+/).length : 0;
+  const chars = text.length;
+  const charsNoSpaces = text.replace(/\s/g, '').length;
+  const sentences = trimmed.length ? (trimmed.match(/[.!?]+(\s|$)/g) || []).length || (trimmed ? 1 : 0) : 0;
+  stats.textContent = `${words} words · ${chars} characters · ${charsNoSpaces} characters (no spaces) · ${sentences} sentences`;
+}
+
+input.addEventListener('input', updateStats);
+
+document.getElementById('btn-upper').addEventListener('click', ()=>{
+  input.value = input.value.toUpperCase();
+  updateStats();
+});
+document.getElementById('btn-lower').addEventListener('click', ()=>{
+  input.value = input.value.toLowerCase();
+  updateStats();
+});
+document.getElementById('btn-title').addEventListener('click', ()=>{
+  input.value = input.value.toLowerCase().replace(/(^|\s|[-'"([{])([a-z])/g, (m, sep, ch)=> sep + ch.toUpperCase());
+  updateStats();
+});
+document.getElementById('btn-sentence').addEventListener('click', ()=>{
+  const lower = input.value.toLowerCase();
+  input.value = lower.replace(/(^\s*[a-z])|([.!?]\s+[a-z])/g, (m)=> m.toUpperCase());
+  updateStats();
+});
+document.getElementById('btn-copy').addEventListener('click', ()=>{
+  navigator.clipboard.writeText(input.value).catch(()=>{});
+});
+document.getElementById('btn-clear').addEventListener('click', ()=>{
+  input.value = '';
+  updateStats();
+  input.focus();
+});
+
+updateStats();
+</script>
+</body>
+</html>
