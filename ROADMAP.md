@@ -18,7 +18,6 @@ a daily scheduled task (see `PROGRESS.md` for the log of what's already been don
 
 ## Next up (in priority order)
 
-- [ ] Add a 4th tool: **Password Generator** (length slider, character-set checkboxes, copy-to-clipboard). Pure JS.
 - [ ] Add a 5th tool: **PDF Compressor** using `pdf-lib` via CDN (https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js) — re-save/re-encode embedded images at lower quality to shrink file size. This is more involved; it's fine to ship a first version that only strips metadata and re-saves, then improve compression in a later increment.
 - [ ] Add a 6th tool: **Image Resizer** (dedicated, simpler UI than the converter — just width/height/aspect-ratio lock and download).
 - [ ] Add a 7th tool: **JSON Formatter / Validator** (paste JSON, pretty-print + validate, copy button).
@@ -42,3 +41,4 @@ a daily scheduled task (see `PROGRESS.md` for the log of what's already been don
 - [x] Added bilingual English/Arabic support site-wide via `assets/i18n.js` (client-side toggle, RTL-aware) — every existing page converted, `#lang-toggle` button in every header.
 - [x] Image Converter & Compressor: added an original-image preview on upload, and a before/after comparison (side-by-side images + a "what changed" summary covering format, quality, dimensions and file size) after conversion.
 - [x] Rebranded to "Code Engineer" / "مهندس كود" with a real logo (owner-supplied image, cropped to a circular icon) as favicon + header logo across every page. Brand name is now translatable via the `brand.name` i18n key — keep using that key (never hardcode the brand name) in any new page.
+- [x] Added 4th tool: Password Generator (`tools/password-generator/`) — length slider (4-64), uppercase/lowercase/numbers/symbols checkboxes, exclude-similar-characters option, Web Crypto-based generation, strength meter, copy-to-clipboard. Live, bilingual, linked from homepage and sitemap.

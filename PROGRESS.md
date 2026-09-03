@@ -4,6 +4,12 @@ Append a new dated entry at the top each time work is done. Keep entries short a
 
 ---
 
+### 2026-09-03 — 4th tool: Password Generator
+- Shipped a 4th tool: Password Generator (`tools/password-generator/index.html`) — length slider (4-64 chars, live-updating), checkboxes for uppercase/lowercase/numbers/symbols, an "exclude similar characters" option (l, 1, I, O, 0), a Weak/Fair/Good/Strong strength indicator, and copy-to-clipboard. Passwords are generated with `crypto.getRandomValues()` (Web Crypto API), not `Math.random()`.
+- Fully bilingual: all new `pwd.*` and `home.card.pwd.*` keys added to both `en` and `ar` dictionaries in `assets/i18n.js`, including RTL-correct Arabic copy; verified with the Node/vm key-coverage script (125 keys used across all pages, zero missing in either language).
+- Linked the new tool from the homepage grid (replacing its slot before the "PDF Compressor — coming soon" card) and added it to `sitemap.xml`. Includes a reserved `.ad-slot`, canonical link, real meta description, and two SEO paragraphs (how it works + password-strength tips).
+- Sanity-checked before commit: JS syntax check (`new Function(...)` on the inline script and `assets/i18n.js`), HTML tag-balance check, and a Playwright smoke test (page loads with zero console errors, Generate/length-slider/checkbox validation/strength meter all work, `#lang-toggle` correctly flips to RTL Arabic and swaps all visible text).
+
 ### 2026-09-02 — Rebrand to "Code Engineer" / "مهندس كود" + real logo
 - Site owner supplied a logo image ("مهندس كود / CODE ENGINEER", a gear+dollar-sign mark). Cropped it down to just the circular gear icon (transparent background) and generated `assets/logo-icon.png` plus `favicon.ico` / `favicon-32.png` / `favicon-180.png` / `favicon-512.png`, linked from every page's `<head>`.
 - Renamed the brand everywhere from "QuickToolsHub" to **"Code Engineer"** (English) / **"مهندس كود"** (Arabic) via a new `brand.name` i18n key — header logo+name, footer copyright, all page titles/meta, README. The name now correctly switches with the language toggle (verified: browser tab title and header text both flip EN↔AR on `#lang-toggle`).

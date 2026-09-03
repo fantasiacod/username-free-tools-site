@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="pwd.title">Free Password Generator — Strong, Random Passwords | Code Engineer</title>
+<meta name="description" content="Generate strong, random passwords with a length slider and character-set options. Free, instant, runs entirely in your browser — no password is ever sent anywhere." data-i18n-content="pwd.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/password-generator/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="pwd.h1">Password Generator</h1>
+      <p class="desc" data-i18n="pwd.desc">Create a strong, random password with the length and character options below. Everything happens locally in your browser using the Web Crypto API — your generated password is never sent anywhere.</p>
+
+      <div class="result">
+        <input id="pwd-output" type="text" readonly value="" data-i18n-placeholder="pwd.placeholder" placeholder="Click Generate to create a password" style="width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:14px;font-size:18px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.5px">
+      </div>
+
+      <p class="note" id="pwd-strength" style="margin-top:10px"></p>
+
+      <div class="controls" style="margin-top:22px">
+        <label style="min-width:220px">
+          <span><span data-i18n="pwd.label.length">Length</span>: <span id="length-value">16</span></span>
+          <input id="pwd-length" type="range" min="4" max="64" value="16">
+        </label>
+      </div>
+
+      <div class="controls" style="margin-top:6px">
+        <label style="flex-direction:row;align-items:center;gap:8px;font-size:14px;color:var(--text)"><input id="opt-uppercase" type="checkbox" checked> <span data-i18n="pwd.label.uppercase">Uppercase (A-Z)</span></label>
+        <label style="flex-direction:row;align-items:center;gap:8px;font-size:14px;color:var(--text)"><input id="opt-lowercase" type="checkbox" checked> <span data-i18n="pwd.label.lowercase">Lowercase (a-z)</span></label>
+        <label style="flex-direction:row;align-items:center;gap:8px;font-size:14px;color:var(--text)"><input id="opt-numbers" type="checkbox" checked> <span data-i18n="pwd.label.numbers">Numbers (0-9)</span></label>
+        <label style="flex-direction:row;align-items:center;gap:8px;font-size:14px;color:var(--text)"><input id="opt-symbols" type="checkbox" checked> <span data-i18n="pwd.label.symbols">Symbols (!@#$...)</span></label>
+      </div>
+      <div class="controls" style="margin-top:2px">
+        <label style="flex-direction:row;align-items:center;gap:8px;font-size:14px;color:var(--text)"><input id="opt-exclude-similar" type="checkbox"> <span data-i18n="pwd.label.excludeSimilar">Exclude similar characters (l, 1, I, O, 0)</span></label>
+      </div>
+
+      <div class="controls">
+        <button id="btn-generate" data-i18n="pwd.btn.generate">Generate</button>
+        <button id="btn-copy" class="secondary" data-i18n="pwd.btn.copy">Copy</button>
+      </div>
+
+      <p class="note" id="pwd-error" style="color:#f87171"></p>
+      <p class="note" data-i18n="pwd.note">Passwords are generated using your browser's cryptographically secure random number generator (Web Crypto API), not a predictable Math.random() sequence. Nothing is stored or transmitted.</p>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+
+    <section class="content">
+      <h2 data-i18n="pwd.h2.how">How this password generator works</h2>
+      <p data-i18n="pwd.p.how">This tool builds a password by picking random characters from the character sets you enable (uppercase letters, lowercase letters, numbers and symbols) using <code>crypto.getRandomValues()</code>, the same cryptographically secure randomness source browsers use for security-sensitive operations. That makes the result far less predictable than passwords generated with a simple pseudo-random function, and since it all runs on your device, the password is never transmitted to a server or logged anywhere.</p>
+      <h2 data-i18n="pwd.h2.tips">Tips for stronger passwords</h2>
+      <p data-i18n="pwd.p.tips">Longer is generally stronger: aim for at least 12-16 characters, and use all four character sets when the site you're signing up for allows it. Avoid reusing the same password across multiple accounts — if one site is breached, reused passwords put every other account at risk too. A password manager can store unique, random passwords like the ones this tool generates so you don't have to remember them yourself.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../../assets/i18n.js"></script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+const output = document.getElementById('pwd-output');
+const lengthInput = document.getElementById('pwd-length');
+const lengthValue = document.getElementById('length-value');
+const strengthEl = document.getElementById('pwd-strength');
+const errorEl = document.getElementById('pwd-error');
+
+const optUpper = document.getElementById('opt-uppercase');
+const optLower = document.getElementById('opt-lowercase');
+const optNumbers = document.getElementById('opt-numbers');
+const optSymbols = document.getElementById('opt-symbols');
+const optExcludeSimilar = document.getElementById('opt-exclude-similar');
+
+const SETS = {
+  upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  lower: 'abcdefghijklmnopqrstuvwxyz',
+  numbers: '0123456789',
+  symbols: '!@#$%^&*()-_=+[]{};:,.<>?'
+};
+const SIMILAR = /[l1IO0]/g;
+
+function t(key){
+  const lang = (window.QTH_I18N && QTH_I18N.getLang()) || 'en';
+  return (window.QTH_I18N && QTH_I18N.t(key, lang)) || key;
+}
+
+function buildCharset(){
+  let charset = '';
+  if(optUpper.checked) charset += SETS.upper;
+  if(optLower.checked) charset += SETS.lower;
+  if(optNumbers.checked) charset += SETS.numbers;
+  if(optSymbols.checked) charset += SETS.symbols;
+  if(optExcludeSimilar.checked) charset = charset.replace(SIMILAR, '');
+  return charset;
+}
+
+function randomInt(max){
+  const arr = new Uint32Array(1);
+  crypto.getRandomValues(arr);
+  return arr[0] % max;
+}
+
+function generatePassword(){
+  errorEl.textContent = '';
+  const charset = buildCharset();
+  if(!charset){
+    errorEl.textContent = t('pwd.error.noCharset');
+    output.value = '';
+    strengthEl.textContent = '';
+    return;
+  }
+  const length = parseInt(lengthInput.value, 10);
+  let pwd = '';
+  for(let i = 0; i < length; i++){
+    pwd += charset[randomInt(charset.length)];
+  }
+  output.value = pwd;
+  updateStrength(pwd, length);
+}
+
+function updateStrength(pwd, length){
+  let variety = 0;
+  if(/[A-Z]/.test(pwd)) variety++;
+  if(/[a-z]/.test(pwd)) variety++;
+  if(/[0-9]/.test(pwd)) variety++;
+  if(/[^A-Za-z0-9]/.test(pwd)) variety++;
+
+  let level;
+  if(length < 8 || variety <= 1) level = 'weak';
+  else if(length < 12 || variety === 2) level = 'fair';
+  else if(length < 16 || variety === 3) level = 'good';
+  else level = 'strong';
+
+  const label = t('pwd.strength.' + level);
+  strengthEl.textContent = t('pwd.strength.label') + ' ' + label;
+}
+
+lengthInput.addEventListener('input', ()=>{
+  lengthValue.textContent = lengthInput.value;
+  if(output.value) generatePassword();
+});
+[optUpper, optLower, optNumbers, optSymbols, optExcludeSimilar].forEach(el=>{
+  el.addEventListener('change', ()=>{ if(output.value || errorEl.textContent) generatePassword(); });
+});
+
+document.getElementById('btn-generate').addEventListener('click', generatePassword);
+document.getElementById('btn-copy').addEventListener('click', ()=>{
+  if(!output.value) return;
+  navigator.clipboard.writeText(output.value).then(()=>{
+    const btn = document.getElementById('btn-copy');
+    const original = btn.textContent;
+    btn.textContent = t('pwd.btn.copied');
+    setTimeout(()=>{ btn.textContent = original; }, 1200);
+  }).catch(()=>{});
+});
+
+document.addEventListener('qth-lang-changed', ()=>{
+  if(output.value) updateStrength(output.value, parseInt(lengthInput.value, 10));
+  if(errorEl.textContent) errorEl.textContent = t('pwd.error.noCharset');
+});
+
+generatePassword();
+</script>
+</body>
+</html>
