@@ -18,7 +18,7 @@ a daily scheduled task (see `PROGRESS.md` for the log of what's already been don
 
 ## Next up (in priority order)
 
-- [ ] Add a 5th tool: **PDF Compressor** using `pdf-lib` via CDN (https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js) — re-save/re-encode embedded images at lower quality to shrink file size. This is more involved; it's fine to ship a first version that only strips metadata and re-saves, then improve compression in a later increment.
+- [ ] Improve the PDF Compressor (`tools/pdf-compressor/`) beyond v1: recompress embedded images (decode via pdf-lib's `page.node.Resources()` / embedded XObjects, redraw through a canvas at lower JPEG quality, and re-embed) for a bigger size reduction on image-heavy PDFs. v1 (metadata stripping + object streams) is live; this is the "later increment" it was scoped to leave for.
 - [ ] Add a 6th tool: **Image Resizer** (dedicated, simpler UI than the converter — just width/height/aspect-ratio lock and download).
 - [ ] Add a 7th tool: **JSON Formatter / Validator** (paste JSON, pretty-print + validate, copy button).
 - [ ] Write a short blog-style article under `/blog/` targeting a real long-tail search query related to one of the tools (e.g. "how to compress a PDF for free without losing quality"), ~500-800 words, genuinely useful, linking to the relevant tool. Add it to the sitemap.
@@ -42,3 +42,4 @@ a daily scheduled task (see `PROGRESS.md` for the log of what's already been don
 - [x] Image Converter & Compressor: added an original-image preview on upload, and a before/after comparison (side-by-side images + a "what changed" summary covering format, quality, dimensions and file size) after conversion.
 - [x] Rebranded to "Code Engineer" / "مهندس كود" with a real logo (owner-supplied image, cropped to a circular icon) as favicon + header logo across every page. Brand name is now translatable via the `brand.name` i18n key — keep using that key (never hardcode the brand name) in any new page.
 - [x] Added 4th tool: Password Generator (`tools/password-generator/`) — length slider (4-64), uppercase/lowercase/numbers/symbols checkboxes, exclude-similar-characters option, Web Crypto-based generation, strength meter, copy-to-clipboard. Live, bilingual, linked from homepage and sitemap.
+- [x] Added 5th tool: PDF Compressor (`tools/pdf-compressor/`) — v1 using `pdf-lib` via CDN: strips embedded metadata and re-saves with compact object streams to shrink file size, with a before/after size + page-count comparison and download. Live, bilingual, linked from homepage (replacing the "coming soon" card) and sitemap. Image-recompression (a bigger win) is queued as a follow-up above.

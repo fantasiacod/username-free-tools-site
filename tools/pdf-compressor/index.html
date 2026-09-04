@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="pdf.title">Free PDF Compressor — Shrink PDF File Size Online | Code Engineer</title>
+<meta name="description" content="Compress a PDF for free, right in your browser. Strips hidden metadata and optimizes the file structure to reduce size. No signup, no upload to a server." data-i18n-content="pdf.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/pdf-compressor/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="pdf.h1">PDF Compressor</h1>
+      <p class="desc" data-i18n="pdf.desc">Drop a PDF below to shrink its file size by stripping hidden metadata and optimizing its internal structure. Everything happens locally in your browser — your PDF is never uploaded anywhere.</p>
+
+      <div class="dropzone" id="dropzone">
+        <div id="dz-label" data-i18n="pdf.dz.label">Click to choose a PDF, or drag &amp; drop it here</div>
+        <input type="file" id="file-input" accept="application/pdf,.pdf">
+      </div>
+
+      <div class="controls" id="opts" style="display:none">
+        <div class="meta" id="original-meta" style="color:var(--muted);font-size:13.5px"></div>
+        <button id="compress-btn" data-i18n="pdf.btn.compress">Compress</button>
+      </div>
+
+      <p class="note" id="pdf-error" style="color:#f87171"></p>
+
+      <div class="result" id="result" style="display:none">
+        <div class="compare-grid">
+          <div class="compare-col">
+            <h4 data-i18n="pdf.compare.original">Original</h4>
+            <div class="meta" id="compare-original-meta"></div>
+          </div>
+          <div class="compare-col">
+            <h4 data-i18n="pdf.compare.compressed">Compressed</h4>
+            <div class="meta" id="compare-compressed-meta"></div>
+          </div>
+        </div>
+
+        <div class="change-summary">
+          <span data-i18n="pdf.summary.label">What changed:</span> <span id="change-text"></span>
+        </div>
+
+        <div class="controls">
+          <button id="download-btn" data-i18n="pdf.btn.download">Download</button>
+        </div>
+      </div>
+
+      <p class="note" data-i18n="pdf.note">Works on non-encrypted PDFs. Because compression strips metadata and rebuilds the file's internal object structure rather than recompressing embedded images, the size reduction varies a lot depending on how the PDF was created — some files shrink noticeably, already-optimized ones may barely change.</p>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+
+    <section class="content">
+      <h2 data-i18n="pdf.h2.how">How this PDF compressor works</h2>
+      <p data-i18n="pdf.p.how">This tool loads your PDF using pdf-lib, an open-source library running entirely in your browser, strips metadata that many PDF creation tools embed (author, title, producer software, timestamps), and re-saves the file using compact cross-reference object streams instead of the older, more verbose PDF format. For PDFs exported with a lot of embedded metadata or produced by software that doesn't use object streams, this can meaningfully shrink the file. Nothing is uploaded to a server at any point.</p>
+      <h2 data-i18n="pdf.h2.tips">Tips for smaller PDF files</h2>
+      <p data-i18n="pdf.p.tips">The biggest driver of PDF file size is usually embedded images. If your PDF is still too large after compressing it here, try re-exporting it at a lower image resolution or JPEG quality from the original source application before compressing, or shrink any images with this site's Image Converter &amp; Compressor before placing them in the document. Scanned documents saved as high-resolution images are the most common cause of oversized PDFs.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+<script src="../../assets/i18n.js"></script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('file-input');
+const opts = document.getElementById('opts');
+const originalMetaEl = document.getElementById('original-meta');
+const compressBtn = document.getElementById('compress-btn');
+const errorEl = document.getElementById('pdf-error');
+const result = document.getElementById('result');
+const compareOriginalMeta = document.getElementById('compare-original-meta');
+const compareCompressedMeta = document.getElementById('compare-compressed-meta');
+const changeText = document.getElementById('change-text');
+const downloadBtn = document.getElementById('download-btn');
+
+let currentFile = null;
+let currentBytes = null;
+let outBlobUrl = null;
+let lastResult = null; // { origKB, newKB, pageCount, fileName }
+
+function lang(){ return (window.QTH_I18N && QTH_I18N.getLang()) || 'en'; }
+function tr(key){ return (window.QTH_I18N && QTH_I18N.t(key, lang())) || key; }
+
+dropzone.addEventListener('click', ()=> fileInput.click());
+dropzone.addEventListener('dragover', (e)=>{ e.preventDefault(); dropzone.classList.add('drag'); });
+dropzone.addEventListener('dragleave', ()=> dropzone.classList.remove('drag'));
+dropzone.addEventListener('drop', (e)=>{
+  e.preventDefault();
+  dropzone.classList.remove('drag');
+  if(e.dataTransfer.files.length) loadFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', (e)=>{
+  if(e.target.files.length) loadFile(e.target.files[0]);
+});
+
+function loadFile(file){
+  errorEl.textContent = '';
+  result.style.display = 'none';
+  lastResult = null;
+  if(outBlobUrl){ URL.revokeObjectURL(outBlobUrl); outBlobUrl = null; }
+
+  if(file.type && file.type !== 'application/pdf' && !/\.pdf$/i.test(file.name)){
+    errorEl.textContent = tr('pdf.error.type');
+    opts.style.display = 'none';
+    return;
+  }
+
+  currentFile = file;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    currentBytes = new Uint8Array(reader.result);
+    document.getElementById('dz-label').textContent = file.name + ' ' + tr('pdf.dz.loaded');
+    const kb = (file.size/1024).toFixed(1);
+    originalMetaEl.textContent = `${file.name} · ${kb} KB`;
+    opts.style.display = 'flex';
+  };
+  reader.onerror = ()=>{
+    errorEl.textContent = tr('pdf.error.generic');
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+async function compressPdf(){
+  if(!currentBytes || !currentFile) return;
+  errorEl.textContent = '';
+  result.style.display = 'none';
+
+  if(!window.PDFLib){
+    errorEl.textContent = tr('pdf.error.libFailed');
+    return;
+  }
+
+  const originalLabel = compressBtn.textContent;
+  compressBtn.disabled = true;
+  compressBtn.textContent = tr('pdf.btn.compressing');
+
+  try{
+    const { PDFDocument } = window.PDFLib;
+    const doc = await PDFDocument.load(currentBytes, { updateMetadata: false });
+
+    doc.setTitle('');
+    doc.setAuthor('');
+    doc.setSubject('');
+    doc.setKeywords([]);
+    doc.setProducer('');
+    doc.setCreator('');
+
+    const pageCount = doc.getPageCount();
+    const outBytes = await doc.save({ useObjectStreams: true });
+
+    const blob = new Blob([outBytes], { type: 'application/pdf' });
+    if(outBlobUrl) URL.revokeObjectURL(outBlobUrl);
+    outBlobUrl = URL.createObjectURL(blob);
+
+    lastResult = {
+      origKB: (currentFile.size/1024).toFixed(1),
+      newKB: (blob.size/1024).toFixed(1),
+      pageCount: pageCount,
+      fileName: currentFile.name.replace(/\.pdf$/i, '') || 'document'
+    };
+    renderChangeSummary();
+    result.style.display = 'block';
+
+    downloadBtn.onclick = ()=>{
+      const a = document.createElement('a');
+      a.href = outBlobUrl;
+      a.download = lastResult.fileName + '-compressed.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    };
+  }catch(err){
+    errorEl.textContent = tr('pdf.error.load');
+  }finally{
+    compressBtn.disabled = false;
+    compressBtn.textContent = originalLabel;
+  }
+}
+
+function renderChangeSummary(){
+  if(!lastResult) return;
+  const r = lastResult;
+  const pct = (100 - (r.newKB/r.origKB*100));
+  const sizeWord = pct >= 0 ? tr('pdf.summary.smaller') : tr('pdf.summary.larger');
+  const changed = Math.abs(pct) >= 0.1;
+  changeText.textContent = `${tr('pdf.summary.pages')}: ${r.pageCount} · ${tr('pdf.summary.filesize')}: ${r.origKB} KB → ${r.newKB} KB` +
+    (changed ? ` (${Math.abs(pct).toFixed(0)}% ${sizeWord})` : ` (${tr('pdf.summary.unchanged')})`);
+
+  compareOriginalMeta.textContent = `${r.origKB} KB`;
+  compareCompressedMeta.textContent = `${r.newKB} KB`;
+}
+document.addEventListener('qth-lang-changed', renderChangeSummary);
+
+compressBtn.addEventListener('click', compressPdf);
+</script>
+</body>
+</html>
