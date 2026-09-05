@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="resize.title">Free Image Resizer — Resize Images Online | Code Engineer</title>
+<meta name="description" content="Resize an image to an exact width and height for free, right in your browser. Aspect-ratio lock, instant preview, no signup, no upload to a server." data-i18n-content="resize.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/image-resizer/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="resize.h1">Image Resizer</h1>
+      <p class="desc" data-i18n="resize.desc">Drop an image below, set the width and height you need, and download the resized result. Everything happens locally in your browser — your image is never uploaded anywhere.</p>
+
+      <div class="dropzone" id="dropzone">
+        <div id="dz-label" data-i18n="resize.dz.label">Click to choose an image, or drag &amp; drop it here</div>
+        <input type="file" id="file-input" accept="image/*">
+      </div>
+
+      <div class="compare-grid" id="original-preview" style="display:none;max-width:320px">
+        <div class="compare-col" style="grid-column:1 / -1">
+          <h4 data-i18n="img.compare.original">Original</h4>
+          <img id="original-img" alt="Original image preview">
+          <div class="meta" id="original-meta"></div>
+        </div>
+      </div>
+
+      <div class="controls" id="opts" style="display:none">
+        <label>
+          <span data-i18n="resize.label.width">Width (px)</span>
+          <input type="number" id="width-input" min="1" style="width:110px">
+        </label>
+        <label>
+          <span data-i18n="resize.label.height">Height (px)</span>
+          <input type="number" id="height-input" min="1" style="width:110px">
+        </label>
+        <label style="flex-direction:row;align-items:center;gap:8px">
+          <input type="checkbox" id="lock-ratio" checked style="width:auto">
+          <span data-i18n="resize.label.lock">Lock aspect ratio</span>
+        </label>
+        <button id="resize-btn" data-i18n="resize.btn.resize">Resize</button>
+      </div>
+
+      <p class="note" id="resize-error" style="color:#f87171"></p>
+
+      <div class="result" id="result" style="display:none">
+        <canvas id="canvas" style="display:none"></canvas>
+
+        <div class="compare-grid">
+          <div class="compare-col">
+            <h4 data-i18n="resize.compare.original">Original</h4>
+            <img id="compare-original-img" alt="Original image">
+            <div class="meta" id="compare-original-meta"></div>
+          </div>
+          <div class="compare-col">
+            <h4 data-i18n="resize.compare.resized">Resized</h4>
+            <img id="preview" alt="Resized preview">
+            <div class="meta" id="compare-resized-meta"></div>
+          </div>
+        </div>
+
+        <div class="change-summary">
+          <span data-i18n="resize.summary.label">What changed:</span> <span id="change-text"></span>
+        </div>
+
+        <div class="controls">
+          <button id="download-btn" data-i18n="resize.btn.download">Download</button>
+        </div>
+      </div>
+
+      <p class="note" data-i18n="resize.note">Supported input: any image type your browser can decode (PNG, JPEG, WebP, GIF, BMP). The resized file downloads in the same format as the original where possible.</p>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+
+    <section class="content">
+      <h2 data-i18n="resize.h2.how">How this image resizer works</h2>
+      <p data-i18n="resize.p.how">The tool draws your image onto an HTML canvas at the exact width and height you set, then re-encodes it using your browser's built-in image codecs — the same technology browsers use to render images on the web. With aspect ratio locked, changing the width automatically recalculates the height (and vice versa) so the image never looks stretched. Nothing is uploaded to a server at any point.</p>
+      <h2 data-i18n="resize.h2.tips">When to resize an image</h2>
+      <p data-i18n="resize.p.tips">Resizing to the exact dimensions a site or form requires — a profile photo, a product image, a banner — keeps pages loading fast and avoids images being auto-scaled (and often blurred) by the platform you're uploading to. For photos you plan to compress further after resizing, this site's Image Converter &amp; Compressor can also adjust format and quality.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../../assets/i18n.js"></script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('file-input');
+const opts = document.getElementById('opts');
+const widthInput = document.getElementById('width-input');
+const heightInput = document.getElementById('height-input');
+const lockRatio = document.getElementById('lock-ratio');
+const canvas = document.getElementById('canvas');
+const preview = document.getElementById('preview');
+const result = document.getElementById('result');
+const downloadBtn = document.getElementById('download-btn');
+const errorEl = document.getElementById('resize-error');
+
+const originalPreviewBlock = document.getElementById('original-preview');
+const originalImgEl = document.getElementById('original-img');
+const originalMetaEl = document.getElementById('original-meta');
+const compareOriginalImg = document.getElementById('compare-original-img');
+const compareOriginalMeta = document.getElementById('compare-original-meta');
+const compareResizedMeta = document.getElementById('compare-resized-meta');
+const changeText = document.getElementById('change-text');
+
+let currentImg = null;
+let currentFile = null;
+let outBlobUrl = null;
+let ratio = 1;
+let lastResult = null; // { origW, origH, newW, newH, origKB, newKB, ext }
+
+function lang(){ return (window.QTH_I18N && QTH_I18N.getLang()) || 'en'; }
+function tr(key){ return (window.QTH_I18N && QTH_I18N.t(key, lang())) || key; }
+
+function mimeFromFile(file){
+  if(file.type === 'image/jpeg' || file.type === 'image/webp' || file.type === 'image/png') return file.type;
+  return 'image/png';
+}
+function extFromMime(mime){
+  return mime === 'image/png' ? 'png' : (mime === 'image/webp' ? 'webp' : 'jpg');
+}
+
+dropzone.addEventListener('click', ()=> fileInput.click());
+dropzone.addEventListener('dragover', (e)=>{ e.preventDefault(); dropzone.classList.add('drag'); });
+dropzone.addEventListener('dragleave', ()=> dropzone.classList.remove('drag'));
+dropzone.addEventListener('drop', (e)=>{
+  e.preventDefault();
+  dropzone.classList.remove('drag');
+  if(e.dataTransfer.files.length) loadFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', (e)=>{
+  if(e.target.files.length) loadFile(e.target.files[0]);
+});
+
+function loadFile(file){
+  errorEl.textContent = '';
+  if(file.type && file.type.indexOf('image/') !== 0){
+    errorEl.textContent = tr('resize.error.type');
+    return;
+  }
+  currentFile = file;
+  result.style.display = 'none';
+  lastResult = null;
+  if(outBlobUrl){ URL.revokeObjectURL(outBlobUrl); outBlobUrl = null; }
+
+  const img = new Image();
+  img.onload = ()=>{
+    currentImg = img;
+    ratio = img.naturalWidth / img.naturalHeight;
+    document.getElementById('dz-label').textContent = file.name + ' ' + tr('resize.dz.loaded');
+    opts.style.display = 'flex';
+
+    widthInput.value = img.naturalWidth;
+    heightInput.value = img.naturalHeight;
+
+    const kb = (file.size/1024).toFixed(1);
+    originalImgEl.src = img.src;
+    originalMetaEl.textContent = `${img.naturalWidth}×${img.naturalHeight} · ${kb} KB`;
+    originalPreviewBlock.style.display = 'grid';
+  };
+  img.onerror = ()=>{
+    errorEl.textContent = tr('resize.error.type');
+  };
+  img.src = URL.createObjectURL(file);
+}
+
+widthInput.addEventListener('input', ()=>{
+  if(!lockRatio.checked || !ratio) return;
+  const w = parseInt(widthInput.value, 10);
+  if(w > 0) heightInput.value = Math.max(1, Math.round(w / ratio));
+});
+heightInput.addEventListener('input', ()=>{
+  if(!lockRatio.checked || !ratio) return;
+  const h = parseInt(heightInput.value, 10);
+  if(h > 0) widthInput.value = Math.max(1, Math.round(h * ratio));
+});
+
+function renderChangeSummary(){
+  if(!lastResult) return;
+  const r = lastResult;
+  const pct = (100 - (r.newKB/r.origKB*100));
+  const sizeWord = pct >= 0 ? tr('resize.summary.smaller') : tr('resize.summary.larger');
+  const changed = Math.abs(pct) >= 0.1;
+  const parts = [];
+  parts.push(`${tr('resize.summary.dimensions')}: ${r.origW}×${r.origH} → ${r.newW}×${r.newH}`);
+  parts.push(`${tr('resize.summary.filesize')}: ${r.origKB} KB → ${r.newKB} KB` + (changed ? ` (${Math.abs(pct).toFixed(0)}% ${sizeWord})` : ` (${tr('resize.summary.unchanged')})`));
+  changeText.textContent = parts.join(' · ');
+
+  compareOriginalMeta.textContent = `${r.origW}×${r.origH} · ${r.origKB} KB`;
+  compareResizedMeta.textContent = `${r.newW}×${r.newH} · ${r.newKB} KB`;
+}
+document.addEventListener('qth-lang-changed', renderChangeSummary);
+
+document.getElementById('resize-btn').addEventListener('click', ()=>{
+  if(!currentImg) return;
+  errorEl.textContent = '';
+
+  const w = parseInt(widthInput.value, 10);
+  const h = parseInt(heightInput.value, 10);
+  if(!w || !h || w < 1 || h < 1){
+    errorEl.textContent = tr('resize.error.dims');
+    return;
+  }
+
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,w,h);
+  ctx.drawImage(currentImg, 0, 0, w, h);
+
+  const mime = mimeFromFile(currentFile);
+  const quality = mime === 'image/png' ? undefined : 0.92;
+
+  canvas.toBlob((blob)=>{
+    if(!blob) return;
+    if(outBlobUrl) URL.revokeObjectURL(outBlobUrl);
+    outBlobUrl = URL.createObjectURL(blob);
+    preview.src = outBlobUrl;
+    compareOriginalImg.src = currentImg.src;
+    result.style.display = 'block';
+
+    lastResult = {
+      origW: currentImg.naturalWidth,
+      origH: currentImg.naturalHeight,
+      newW: w,
+      newH: h,
+      origKB: (currentFile.size/1024).toFixed(1),
+      newKB: (blob.size/1024).toFixed(1),
+      ext: extFromMime(mime)
+    };
+    renderChangeSummary();
+
+    downloadBtn.onclick = ()=>{
+      const a = document.createElement('a');
+      a.href = outBlobUrl;
+      a.download = 'resized.' + extFromMime(mime);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    };
+  }, mime, quality);
+});
+</script>
+</body>
+</html>
