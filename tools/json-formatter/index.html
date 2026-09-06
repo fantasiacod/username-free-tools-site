@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="json.title">Free JSON Formatter &amp; Validator | Code Engineer</title>
+<meta name="description" content="Format, validate and minify JSON for free, right in your browser. Instant error messages with line/column position. No signup, no upload to a server." data-i18n-content="json.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/json-formatter/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="json.h1">JSON Formatter &amp; Validator</h1>
+      <p class="desc" data-i18n="json.desc">Paste your JSON below and click Format to pretty-print it with proper indentation, or Minify to compress it to a single line. Invalid JSON is validated instantly with a clear error message. Nothing you paste is sent anywhere.</p>
+
+      <textarea id="json-input" placeholder='{"example": "Paste your JSON here..."}' data-i18n-placeholder="json.placeholder" style="width:100%;min-height:260px;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:14px;font-size:13.5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical;white-space:pre;overflow-wrap:normal"></textarea>
+
+      <div class="controls">
+        <button id="btn-format" data-i18n="json.btn.format">Format</button>
+        <button id="btn-minify" class="secondary" data-i18n="json.btn.minify">Minify</button>
+        <label style="flex-direction:row;align-items:center;gap:8px;font-size:13.5px;color:var(--muted)">
+          <span data-i18n="json.label.indent">Indent:</span>
+          <select id="indent-size">
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="tab" data-i18n="json.indent.tab">Tab</option>
+          </select>
+        </label>
+        <button id="btn-copy" class="secondary" data-i18n="json.btn.copy">Copy</button>
+        <button id="btn-clear" class="secondary" data-i18n="json.btn.clear">Clear</button>
+      </div>
+
+      <p class="note" id="json-status"></p>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+
+    <section class="content">
+      <h2 data-i18n="json.h2.how">How this JSON formatter works</h2>
+      <p data-i18n="json.p.how">This tool parses the JSON you paste using your browser's built-in <code>JSON.parse()</code> and <code>JSON.stringify()</code>, the same JSON engine used internally by web browsers — no external library is loaded and nothing is uploaded to a server. If the JSON is invalid, the parser's error is translated into a plain-English message that points to the approximate line and column where the problem starts, so you can fix it quickly instead of scanning the whole document by eye.</p>
+      <h2 data-i18n="json.h2.when">When you'd use a JSON formatter</h2>
+      <p data-i18n="json.p.when">Minified JSON from an API response, a log file, or a config export is hard to read as one long line — formatting it with indentation makes the structure (objects, arrays, nesting) instantly clear. Going the other way, minifying removes all unnecessary whitespace before pasting JSON into a place with a size limit, or before sending it over the wire, since every extra space and newline adds to the payload size.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../../assets/i18n.js"></script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+const input = document.getElementById('json-input');
+const statusEl = document.getElementById('json-status');
+const indentSelect = document.getElementById('indent-size');
+
+function t(key){
+  const lang = (window.QTH_I18N && QTH_I18N.getLang()) || 'en';
+  return (window.QTH_I18N && QTH_I18N.t(key, lang)) || key;
+}
+
+function currentIndent(){
+  const v = indentSelect.value;
+  if(v === 'tab') return '\t';
+  return parseInt(v, 10);
+}
+
+function positionToLineCol(text, pos){
+  let line = 1, col = 1;
+  for(let i = 0; i < pos && i < text.length; i++){
+    if(text[i] === '\n'){ line++; col = 1; } else { col++; }
+  }
+  return { line: line, col: col };
+}
+
+function extractLineCol(message, text){
+  // Some engines report "line X column Y" directly.
+  const lc1 = /line (\d+) column (\d+)/i.exec(message);
+  if(lc1) return { line: parseInt(lc1[1], 10), col: parseInt(lc1[2], 10) };
+  // Others report a character "position N" into the string.
+  const pos = /position (\d+)/i.exec(message);
+  if(pos) return positionToLineCol(text, parseInt(pos[1], 10));
+  return null;
+}
+
+function showError(err){
+  const text = input.value;
+  const lc = extractLineCol(err.message, text);
+  if(lc){
+    statusEl.textContent = t('json.error.invalidAt').replace('{line}', lc.line).replace('{col}', lc.col);
+  } else {
+    statusEl.textContent = t('json.error.invalid');
+  }
+  statusEl.style.color = '#f87171';
+}
+
+function showSuccess(key){
+  statusEl.textContent = t(key);
+  statusEl.style.color = 'var(--accent-2)';
+}
+
+function formatJson(){
+  const raw = input.value.trim();
+  if(!raw){
+    statusEl.textContent = t('json.error.empty');
+    statusEl.style.color = '#f87171';
+    return;
+  }
+  try {
+    const parsed = JSON.parse(raw);
+    input.value = JSON.stringify(parsed, null, currentIndent());
+    showSuccess('json.status.formatted');
+  } catch(err){
+    showError(err);
+  }
+}
+
+function minifyJson(){
+  const raw = input.value.trim();
+  if(!raw){
+    statusEl.textContent = t('json.error.empty');
+    statusEl.style.color = '#f87171';
+    return;
+  }
+  try {
+    const parsed = JSON.parse(raw);
+    input.value = JSON.stringify(parsed);
+    showSuccess('json.status.minified');
+  } catch(err){
+    showError(err);
+  }
+}
+
+document.getElementById('btn-format').addEventListener('click', formatJson);
+document.getElementById('btn-minify').addEventListener('click', minifyJson);
+document.getElementById('btn-copy').addEventListener('click', ()=>{
+  if(!input.value) return;
+  navigator.clipboard.writeText(input.value).then(()=>{
+    const btn = document.getElementById('btn-copy');
+    const original = btn.textContent;
+    btn.textContent = t('json.btn.copied');
+    setTimeout(()=>{ btn.textContent = original; }, 1200);
+  }).catch(()=>{});
+});
+document.getElementById('btn-clear').addEventListener('click', ()=>{
+  input.value = '';
+  statusEl.textContent = '';
+  input.focus();
+});
+
+document.addEventListener('qth-lang-changed', ()=>{
+  // Re-translate a currently-shown status message by re-running the last action's
+  // message key is not tracked; simplest correct behavior is to just clear it,
+  // since the JSON content itself doesn't need re-translation.
+  if(statusEl.textContent) statusEl.textContent = '';
+});
+</script>
+</body>
+</html>
