@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="unit.title">Free Unit Converter — Length, Weight &amp; Temperature | Code Engineer</title>
+<meta name="description" content="Convert between metric and imperial units instantly: length, weight and temperature. Free, accurate, runs entirely in your browser — no signup, nothing uploaded." data-i18n-content="unit.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/unit-converter/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="unit.h1">Unit Converter</h1>
+      <p class="desc" data-i18n="unit.desc">Choose a category, pick your units, and type a value — the other field updates instantly. Works in both directions. Nothing you enter is sent anywhere.</p>
+
+      <div class="controls">
+        <label>
+          <span data-i18n="unit.label.category">Category:</span>
+          <select id="category-select">
+            <option value="length" data-i18n="unit.category.length">Length</option>
+            <option value="weight" data-i18n="unit.category.weight">Weight</option>
+            <option value="temperature" data-i18n="unit.category.temperature">Temperature</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="controls" style="margin-top:22px;align-items:flex-end">
+        <label>
+          <span data-i18n="unit.label.from">From</span>
+          <input type="number" id="from-value" value="1" inputmode="decimal">
+        </label>
+        <label>
+          <span>&nbsp;</span>
+          <select id="from-unit"></select>
+        </label>
+
+        <button id="btn-swap" class="secondary" type="button" data-i18n="unit.btn.swap" style="align-self:center">⇄ Swap</button>
+
+        <label>
+          <span data-i18n="unit.label.to">To</span>
+          <input type="number" id="to-value" inputmode="decimal">
+        </label>
+        <label>
+          <span>&nbsp;</span>
+          <select id="to-unit"></select>
+        </label>
+      </div>
+
+      <p class="note" id="unit-note" data-i18n="unit.note">Conversions use standard international definitions (for example, 1 inch = exactly 2.54 cm).</p>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+
+    <section class="content">
+      <h2 data-i18n="unit.h2.how">How this unit converter works</h2>
+      <p data-i18n="unit.p.how">Pick a category — length, weight, or temperature — then type a number into either field and pick the units on each side. Length and weight conversions go through a common base unit (meters and grams) using fixed international conversion factors, so switching between metric and imperial (centimeters, inches, kilograms, pounds, and so on) is always exact. Temperature uses the actual Celsius/Fahrenheit/Kelvin formulas rather than a simple multiplier, since those scales don't share a zero point. Everything is calculated instantly in your browser as you type — there's no button to click and nothing is sent to a server.</p>
+      <h2 data-i18n="unit.h2.when">When you'd use a unit converter</h2>
+      <p data-i18n="unit.p.when">Unit conversion comes up constantly when reading a recipe from another country, following a fitness or medical measurement in the "wrong" system, checking a shipping package's dimensions or weight limit, converting a weather forecast's temperature, or working on any project that mixes metric and imperial units. A quick, accurate converter beats doing the math by hand or searching for a single-purpose calculator every time.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../../assets/i18n.js"></script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+var UNITS = {
+  length: {
+    base: 'm',
+    factors: { mm: 0.001, cm: 0.01, m: 1, km: 1000, in: 0.0254, ft: 0.3048, yd: 0.9144, mi: 1609.344 },
+    order: ['mm', 'cm', 'm', 'km', 'in', 'ft', 'yd', 'mi'],
+    defaultFrom: 'cm',
+    defaultTo: 'in'
+  },
+  weight: {
+    base: 'g',
+    factors: { mg: 0.001, g: 1, kg: 1000, oz: 28.349523125, lb: 453.59237 },
+    order: ['mg', 'g', 'kg', 'oz', 'lb'],
+    defaultFrom: 'kg',
+    defaultTo: 'lb'
+  },
+  temperature: {
+    order: ['c', 'f', 'k'],
+    labels: { c: '°C', f: '°F', k: 'K' },
+    defaultFrom: 'c',
+    defaultTo: 'f'
+  }
+};
+
+function unitLabel(category, unit){
+  if(category === 'temperature') return UNITS.temperature.labels[unit];
+  return unit;
+}
+
+function toCelsius(value, unit){
+  if(unit === 'c') return value;
+  if(unit === 'f') return (value - 32) * 5 / 9;
+  if(unit === 'k') return value - 273.15;
+}
+function fromCelsius(celsius, unit){
+  if(unit === 'c') return celsius;
+  if(unit === 'f') return celsius * 9 / 5 + 32;
+  if(unit === 'k') return celsius + 273.15;
+}
+
+function convert(category, value, fromUnit, toUnit){
+  if(isNaN(value)) return NaN;
+  if(category === 'temperature'){
+    return fromCelsius(toCelsius(value, fromUnit), toUnit);
+  }
+  var def = UNITS[category];
+  var base = value * def.factors[fromUnit];
+  return base / def.factors[toUnit];
+}
+
+function roundResult(n){
+  if(!isFinite(n)) return '';
+  var rounded = Math.round(n * 1e6) / 1e6;
+  return String(rounded);
+}
+
+var categorySelect = document.getElementById('category-select');
+var fromValue = document.getElementById('from-value');
+var toValue = document.getElementById('to-value');
+var fromUnit = document.getElementById('from-unit');
+var toUnit = document.getElementById('to-unit');
+var swapBtn = document.getElementById('btn-swap');
+
+function populateUnits(category){
+  var def = UNITS[category];
+  fromUnit.innerHTML = '';
+  toUnit.innerHTML = '';
+  def.order.forEach(function(u){
+    var label = unitLabel(category, u);
+    var opt1 = document.createElement('option');
+    opt1.value = u; opt1.textContent = label;
+    fromUnit.appendChild(opt1);
+    var opt2 = document.createElement('option');
+    opt2.value = u; opt2.textContent = label;
+    toUnit.appendChild(opt2);
+  });
+  fromUnit.value = def.defaultFrom;
+  toUnit.value = def.defaultTo;
+}
+
+function recalcFromTo(){
+  var v = parseFloat(fromValue.value);
+  var category = categorySelect.value;
+  var result = convert(category, v, fromUnit.value, toUnit.value);
+  toValue.value = roundResult(result);
+}
+
+function recalcToFrom(){
+  var v = parseFloat(toValue.value);
+  var category = categorySelect.value;
+  var result = convert(category, v, toUnit.value, fromUnit.value);
+  fromValue.value = roundResult(result);
+}
+
+categorySelect.addEventListener('change', function(){
+  populateUnits(categorySelect.value);
+  recalcFromTo();
+});
+fromValue.addEventListener('input', recalcFromTo);
+toValue.addEventListener('input', recalcToFrom);
+fromUnit.addEventListener('change', recalcFromTo);
+toUnit.addEventListener('change', recalcFromTo);
+swapBtn.addEventListener('click', function(){
+  var fu = fromUnit.value, tu = toUnit.value;
+  fromUnit.value = tu; toUnit.value = fu;
+  recalcFromTo();
+});
+
+populateUnits(categorySelect.value);
+recalcFromTo();
+</script>
+</body>
+</html>

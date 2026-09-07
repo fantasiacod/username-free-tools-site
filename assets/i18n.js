@@ -32,6 +32,8 @@
       "home.card.resize.desc": "Resize any image to an exact width and height, with aspect-ratio lock.",
       "home.card.json.title": "JSON Formatter & Validator",
       "home.card.json.desc": "Pretty-print, minify and validate JSON, with clear error messages.",
+      "home.card.unit.title": "Unit Converter",
+      "home.card.unit.desc": "Convert length, weight and temperature between metric and imperial, live as you type.",
       "badge.live": "Live",
       "badge.soon": "Coming soon",
       "home.content.h2": "Why Code Engineer?",
@@ -234,7 +236,24 @@
       "json.h2.how": "How this JSON formatter works",
       "json.p.how": "This tool parses the JSON you paste using your browser's built-in JSON.parse() and JSON.stringify(), the same JSON engine used internally by web browsers — no external library is loaded and nothing is uploaded to a server. If the JSON is invalid, the parser's error is translated into a plain-English message that points to the approximate line and column where the problem starts, so you can fix it quickly instead of scanning the whole document by eye.",
       "json.h2.when": "When you'd use a JSON formatter",
-      "json.p.when": "Minified JSON from an API response, a log file, or a config export is hard to read as one long line — formatting it with indentation makes the structure (objects, arrays, nesting) instantly clear. Going the other way, minifying removes all unnecessary whitespace before pasting JSON into a place with a size limit, or before sending it over the wire, since every extra space and newline adds to the payload size."
+      "json.p.when": "Minified JSON from an API response, a log file, or a config export is hard to read as one long line — formatting it with indentation makes the structure (objects, arrays, nesting) instantly clear. Going the other way, minifying removes all unnecessary whitespace before pasting JSON into a place with a size limit, or before sending it over the wire, since every extra space and newline adds to the payload size.",
+
+      "unit.title": "Free Unit Converter — Length, Weight & Temperature | Code Engineer",
+      "unit.meta": "Convert between metric and imperial units instantly: length, weight and temperature. Free, accurate, runs entirely in your browser — no signup, nothing uploaded.",
+      "unit.h1": "Unit Converter",
+      "unit.desc": "Choose a category, pick your units, and type a value — the other field updates instantly. Works in both directions. Nothing you enter is sent anywhere.",
+      "unit.label.category": "Category:",
+      "unit.category.length": "Length",
+      "unit.category.weight": "Weight",
+      "unit.category.temperature": "Temperature",
+      "unit.label.from": "From",
+      "unit.label.to": "To",
+      "unit.btn.swap": "⇄ Swap",
+      "unit.note": "Conversions use standard international definitions (for example, 1 inch = exactly 2.54 cm).",
+      "unit.h2.how": "How this unit converter works",
+      "unit.p.how": "Pick a category — length, weight, or temperature — then type a number into either field and pick the units on each side. Length and weight conversions go through a common base unit (meters and grams) using fixed international conversion factors, so switching between metric and imperial (centimeters, inches, kilograms, pounds, and so on) is always exact. Temperature uses the actual Celsius/Fahrenheit/Kelvin formulas rather than a simple multiplier, since those scales don't share a zero point. Everything is calculated instantly in your browser as you type — there's no button to click and nothing is sent to a server.",
+      "unit.h2.when": "When you'd use a unit converter",
+      "unit.p.when": "Unit conversion comes up constantly when reading a recipe from another country, following a fitness or medical measurement in the \"wrong\" system, checking a shipping package's dimensions or weight limit, converting a weather forecast's temperature, or working on any project that mixes metric and imperial units. A quick, accurate converter beats doing the math by hand or searching for a single-purpose calculator every time."
     },
     ar: {
       "brand.name": "مهندس كود",
@@ -264,6 +283,8 @@
       "home.card.resize.desc": "غيّر حجم أي صورة إلى عرض وارتفاع محددين، مع قفل نسبة الأبعاد.",
       "home.card.json.title": "منسّق ومدقّق JSON",
       "home.card.json.desc": "نسّق، صغّر، ودقّق صحة JSON، مع رسائل خطأ واضحة.",
+      "home.card.unit.title": "محوّل الوحدات",
+      "home.card.unit.desc": "حوّل الطول والوزن ودرجة الحرارة بين المتري والإمبراطوري، مباشرة أثناء الكتابة.",
       "badge.live": "متاحة الآن",
       "badge.soon": "قريبًا",
       "home.content.h2": "ليش مهندس كود؟",
@@ -466,7 +487,24 @@
       "json.h2.how": "كيف يعمل منسّق JSON هذا",
       "json.p.how": "تحلّل هذه الأداة كود JSON اللي تلصقه باستخدام JSON.parse() وJSON.stringify() المدمجتين في متصفحك — نفس محرك JSON اللي تستخدمه المتصفحات داخليًا — بدون تحميل أي مكتبة خارجية وبدون رفع أي شي لسيرفر. إذا كان الكود غير صالح، تتم ترجمة خطأ المحلّل إلى رسالة واضحة تشير إلى السطر والعمود التقريبيين لبداية المشكلة، حتى تقدر تصلحها بسرعة بدل مراجعة المستند كامل بعينك.",
       "json.h2.when": "متى تحتاج منسّق JSON",
-      "json.p.when": "كود JSON المصغّر من استجابة API أو ملف سجل أو تصدير إعدادات يصعب قراءته كسطر واحد طويل — تنسيقه بمسافات بادئة يجعل بنيته (الكائنات، المصفوفات، التداخل) واضحة فورًا. وبالعكس، التصغير يحذف كل المسافات غير الضرورية قبل لصق JSON في مكان له حد أقصى للحجم، أو قبل إرساله عبر الشبكة، لأن كل مسافة أو سطر جديد إضافي يزيد من حجم البيانات."
+      "json.p.when": "كود JSON المصغّر من استجابة API أو ملف سجل أو تصدير إعدادات يصعب قراءته كسطر واحد طويل — تنسيقه بمسافات بادئة يجعل بنيته (الكائنات، المصفوفات، التداخل) واضحة فورًا. وبالعكس، التصغير يحذف كل المسافات غير الضرورية قبل لصق JSON في مكان له حد أقصى للحجم، أو قبل إرساله عبر الشبكة، لأن كل مسافة أو سطر جديد إضافي يزيد من حجم البيانات.",
+
+      "unit.title": "محوّل وحدات مجاني — طول ووزن ودرجة حرارة | مهندس كود",
+      "unit.meta": "حوّل بين الوحدات المترية والإمبراطورية فورًا: الطول والوزن ودرجة الحرارة. مجاني ودقيق ويعمل بالكامل داخل متصفحك — بدون تسجيل وبدون رفع أي شي.",
+      "unit.h1": "محوّل الوحدات",
+      "unit.desc": "اختر تصنيفًا، وحدّد الوحدات، واكتب رقمًا — الحقل الآخر يتحدّث فورًا. يعمل في الاتجاهين. لا شي مما تُدخله يُرسل لأي مكان.",
+      "unit.label.category": "التصنيف:",
+      "unit.category.length": "الطول",
+      "unit.category.weight": "الوزن",
+      "unit.category.temperature": "درجة الحرارة",
+      "unit.label.from": "من",
+      "unit.label.to": "إلى",
+      "unit.btn.swap": "⇄ تبديل",
+      "unit.note": "تعتمد التحويلات على تعريفات دولية قياسية (مثلًا، 1 إنش = 2.54 سم بالضبط).",
+      "unit.h2.how": "كيف يعمل محوّل الوحدات هذا",
+      "unit.p.how": "اختر تصنيفًا — الطول أو الوزن أو درجة الحرارة — ثم اكتب رقمًا في أي حقل وحدّد الوحدات على كل جانب. تمر تحويلات الطول والوزن عبر وحدة أساس مشتركة (المتر والغرام) باستخدام معاملات تحويل دولية ثابتة، لذا فإن التبديل بين المتري والإمبراطوري (سنتيمتر، إنش، كيلوغرام، رطل، وغيرها) دقيق دائمًا. أما درجة الحرارة فتستخدم معادلات سيلسيوس/فهرنهايت/كلفن الفعلية بدل ضرب بسيط، لأن هذه المقاييس لا تشترك في نقطة صفر واحدة. كل شي يُحسب فورًا داخل متصفحك أثناء الكتابة — بدون زر تضغطه وبدون إرسال أي شي لسيرفر.",
+      "unit.h2.when": "متى تحتاج محوّل وحدات",
+      "unit.p.when": "تحويل الوحدات يحتاجه الناس باستمرار: عند قراءة وصفة طبخ من بلد آخر، أو متابعة قياس رياضي أو طبي بنظام غير الذي تعرفه، أو التحقق من أبعاد أو حد وزن طرد للشحن، أو تحويل درجة حرارة نشرة الطقس، أو العمل على أي مشروع يخلط بين الوحدات المترية والإمبراطورية. محوّل سريع ودقيق أفضل من الحساب اليدوي أو البحث عن آلة حاسبة مخصصة كل مرة."
     }
   };
 
