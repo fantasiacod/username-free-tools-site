@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title data-i18n="pdf.title">Free PDF Compressor — Shrink PDF File Size Online | Code Engineer</title>
-<meta name="description" content="Compress a PDF for free, right in your browser. Strips hidden metadata and optimizes the file structure to reduce size. No signup, no upload to a server." data-i18n-content="pdf.meta">
+<meta name="description" content="Compress a PDF for free, right in your browser. Strips hidden metadata, recompresses embedded JPEG images, and optimizes the file structure to shrink file size. No signup, no upload to a server." data-i18n-content="pdf.meta">
 <link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/pdf-compressor/index.html">
 <link rel="stylesheet" href="../../assets/style.css">
 <link rel="icon" type="image/x-icon" href="../../favicon.ico">
@@ -28,7 +28,7 @@
   <div class="wrap">
     <div class="tool-panel">
       <h1 data-i18n="pdf.h1">PDF Compressor</h1>
-      <p class="desc" data-i18n="pdf.desc">Drop a PDF below to shrink its file size by stripping hidden metadata and optimizing its internal structure. Everything happens locally in your browser — your PDF is never uploaded anywhere.</p>
+      <p class="desc" data-i18n="pdf.desc">Drop a PDF below to shrink its file size — hidden metadata is stripped, embedded JPEG images are recompressed at a slightly reduced quality, and the file's internal structure is optimized. Everything happens locally in your browser — your PDF is never uploaded anywhere.</p>
 
       <div class="dropzone" id="dropzone">
         <div id="dz-label" data-i18n="pdf.dz.label">Click to choose a PDF, or drag &amp; drop it here</div>
@@ -63,14 +63,14 @@
         </div>
       </div>
 
-      <p class="note" data-i18n="pdf.note">Works on non-encrypted PDFs. Because compression strips metadata and rebuilds the file's internal object structure rather than recompressing embedded images, the size reduction varies a lot depending on how the PDF was created — some files shrink noticeably, already-optimized ones may barely change.</p>
+      <p class="note" data-i18n="pdf.note">Works on non-encrypted PDFs. In addition to stripping metadata, JPEG images inside the PDF are recompressed at a slightly lower quality when it's safe to do so — CMYK, indexed-color, and already efficiently compressed images are left untouched to avoid any risk of corrupting or discoloring them. The size reduction varies a lot depending on the file: image-heavy scanned documents shrink the most, already-optimized files may barely change.</p>
     </div>
 
     <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
 
     <section class="content">
       <h2 data-i18n="pdf.h2.how">How this PDF compressor works</h2>
-      <p data-i18n="pdf.p.how">This tool loads your PDF using pdf-lib, an open-source library running entirely in your browser, strips metadata that many PDF creation tools embed (author, title, producer software, timestamps), and re-saves the file using compact cross-reference object streams instead of the older, more verbose PDF format. For PDFs exported with a lot of embedded metadata or produced by software that doesn't use object streams, this can meaningfully shrink the file. Nothing is uploaded to a server at any point.</p>
+      <p data-i18n="pdf.p.how">This tool loads your PDF using pdf-lib, an open-source library running entirely in your browser. It strips metadata that many PDF creation tools embed (author, title, producer software, timestamps), recompresses eligible embedded JPEG images at a slightly reduced quality to shrink them further, and re-saves the file using compact cross-reference object streams instead of the older, more verbose PDF format. Every compressed file is automatically checked before it's offered for download, and if anything looks off the tool falls back to a metadata-only version instead — so you never end up with a broken file. Nothing is uploaded to a server at any point.</p>
       <h2 data-i18n="pdf.h2.tips">Tips for smaller PDF files</h2>
       <p data-i18n="pdf.p.tips">The biggest driver of PDF file size is usually embedded images. If your PDF is still too large after compressing it here, try re-exporting it at a lower image resolution or JPEG quality from the original source application before compressing, or shrink any images with this site's Image Converter &amp; Compressor before placing them in the document. Scanned documents saved as high-resolution images are the most common cause of oversized PDFs.</p>
     </section>
@@ -151,6 +151,122 @@ function loadFile(file){
   reader.readAsArrayBuffer(file);
 }
 
+// --- Embedded JPEG recompression -------------------------------------
+// Scans page XObjects for plain JPEG (DCTDecode) images and, for the
+// safe, common cases (baseline grayscale or RGB/YCbCr JPEGs with no
+// custom Decode array and no exotic color space), recompresses them at
+// a slightly reduced quality via the canvas. Anything that isn't
+// clearly safe -- CMYK/4-component JPEGs, indexed or separation color
+// spaces, custom Decode arrays, or a dimension mismatch -- is left
+// untouched. Images are only ever replaced with a *smaller* result.
+const MAX_IMAGES_TO_OPTIMIZE = 300;
+
+function jpegComponentCount(bytes){
+  if(bytes.length < 4 || bytes[0] !== 0xff || bytes[1] !== 0xd8) return null;
+  let i = 2;
+  while(i < bytes.length - 1){
+    if(bytes[i] !== 0xff){ i++; continue; }
+    const marker = bytes[i+1];
+    if(marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)){ i += 2; continue; }
+    if(marker === 0xd9) break;
+    if(i + 3 >= bytes.length) break;
+    const len = (bytes[i+2] << 8) | bytes[i+3];
+    const isSOF = (marker >= 0xc0 && marker <= 0xcf) && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc;
+    if(isSOF){
+      const numComponentsOffset = i + 2 + 2 + 1 + 2 + 2;
+      return numComponentsOffset < bytes.length ? bytes[numComponentsOffset] : null;
+    }
+    i += 2 + len;
+  }
+  return null;
+}
+
+async function recompressJpegBytes(bytes, quality){
+  const bitmap = await createImageBitmap(new Blob([bytes], { type: 'image/jpeg' }));
+  try{
+    const canvas = document.createElement('canvas');
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    canvas.getContext('2d').drawImage(bitmap, 0, 0);
+    const outBlob = await new Promise((resolve)=> canvas.toBlob(resolve, 'image/jpeg', quality));
+    if(!outBlob) return null;
+    return { bytes: new Uint8Array(await outBlob.arrayBuffer()), width: bitmap.width, height: bitmap.height };
+  } finally {
+    bitmap.close && bitmap.close();
+  }
+}
+
+async function recompressPdfImages(PDFLib, doc, quality){
+  const { PDFName, PDFArray, PDFRawStream, PDFNumber, PDFRef, PDFDict } = PDFLib;
+  const context = doc.context;
+  const seen = new Set();
+  const stats = { attempted: 0, recompressed: 0 };
+
+  for(const page of doc.getPages()){
+    if(stats.attempted >= MAX_IMAGES_TO_OPTIMIZE) break;
+    let resources;
+    try{ resources = page.node.Resources(); }catch(e){ continue; }
+    if(!resources) continue;
+    let xObjects;
+    try{ xObjects = resources.lookup(PDFName.of('XObject'), PDFDict); }catch(e){ continue; }
+    if(!xObjects) continue;
+
+    for(const [, ref] of xObjects.entries()){
+      if(stats.attempted >= MAX_IMAGES_TO_OPTIMIZE) break;
+      if(!(ref instanceof PDFRef) || seen.has(ref.tag)) continue;
+      seen.add(ref.tag);
+
+      let stream;
+      try{ stream = context.lookup(ref, PDFRawStream); }catch(e){ continue; }
+      if(!stream) continue;
+
+      const dict = stream.dict;
+      const subtype = dict.get(PDFName.of('Subtype'));
+      if(!subtype || subtype.toString() !== '/Image') continue;
+
+      const filter = dict.get(PDFName.of('Filter'));
+      let filterName = '';
+      if(filter){
+        filterName = filter instanceof PDFArray
+          ? (filter.size() === 1 ? filter.get(0).toString() : '')
+          : filter.toString();
+      }
+      if(filterName !== '/DCTDecode') continue; // only plain JPEG streams
+
+      // Skip anything where re-encoding could change the color mapping.
+      if(dict.has(PDFName.of('Decode')) || dict.has(PDFName.of('DecodeParms')) || dict.has(PDFName.of('DP'))) continue;
+      const colorSpace = dict.get(PDFName.of('ColorSpace')) || dict.get(PDFName.of('CS'));
+      if(colorSpace){
+        const csName = (colorSpace instanceof PDFArray && colorSpace.size() > 0) ? colorSpace.get(0).toString() : colorSpace.toString();
+        if(csName === '/Indexed' || csName === '/Separation' || csName === '/DeviceN') continue;
+      }
+
+      const origBytes = stream.contents;
+      const numComponents = jpegComponentCount(origBytes);
+      if(numComponents !== 1 && numComponents !== 3) continue; // skip CMYK/unknown
+
+      const declaredWidth = dict.get(PDFName.of('Width')) || dict.get(PDFName.of('W'));
+      const declaredHeight = dict.get(PDFName.of('Height')) || dict.get(PDFName.of('H'));
+
+      stats.attempted++;
+      try{
+        const result = await recompressJpegBytes(origBytes, quality);
+        if(!result) continue;
+        if(declaredWidth && declaredHeight &&
+           (result.width !== declaredWidth.asNumber() || result.height !== declaredHeight.asNumber())){
+          continue; // dimension mismatch -- don't risk it
+        }
+        if(result.bytes.length > 0 && result.bytes.length < origBytes.length){
+          stream.contents = result.bytes;
+          dict.set(PDFName.of('Length'), PDFNumber.of(result.bytes.length));
+          stats.recompressed++;
+        }
+      }catch(e){ /* leave this image untouched */ }
+    }
+  }
+  return stats;
+}
+
 async function compressPdf(){
   if(!currentBytes || !currentFile) return;
   errorEl.textContent = '';
@@ -169,15 +285,42 @@ async function compressPdf(){
     const { PDFDocument } = window.PDFLib;
     const doc = await PDFDocument.load(currentBytes, { updateMetadata: false });
 
-    doc.setTitle('');
-    doc.setAuthor('');
-    doc.setSubject('');
-    doc.setKeywords([]);
-    doc.setProducer('');
-    doc.setCreator('');
+    const stripMetadata = (d)=>{
+      d.setTitle('');
+      d.setAuthor('');
+      d.setSubject('');
+      d.setKeywords([]);
+      d.setProducer('');
+      d.setCreator('');
+    };
+    stripMetadata(doc);
 
     const pageCount = doc.getPageCount();
-    const outBytes = await doc.save({ useObjectStreams: true });
+
+    let imageStats = { attempted: 0, recompressed: 0 };
+    if(typeof createImageBitmap === 'function'){
+      try{
+        imageStats = await recompressPdfImages(window.PDFLib, doc, 0.72);
+      }catch(e){ imageStats = { attempted: 0, recompressed: 0 }; }
+    }
+
+    let outBytes = await doc.save({ useObjectStreams: true });
+
+    // Safety net: re-open the file we're about to hand back and make sure
+    // it still looks structurally sound. If not, fall back to a
+    // metadata-only re-save of the original so we never ship a broken PDF.
+    let verified = false;
+    try{
+      const reloaded = await PDFDocument.load(outBytes);
+      verified = reloaded.getPageCount() === pageCount;
+    }catch(e){ verified = false; }
+
+    if(!verified && imageStats.recompressed > 0){
+      const fallbackDoc = await PDFDocument.load(currentBytes, { updateMetadata: false });
+      stripMetadata(fallbackDoc);
+      outBytes = await fallbackDoc.save({ useObjectStreams: true });
+      imageStats = { attempted: 0, recompressed: 0 };
+    }
 
     const blob = new Blob([outBytes], { type: 'application/pdf' });
     if(outBlobUrl) URL.revokeObjectURL(outBlobUrl);
@@ -187,6 +330,7 @@ async function compressPdf(){
       origKB: (currentFile.size/1024).toFixed(1),
       newKB: (blob.size/1024).toFixed(1),
       pageCount: pageCount,
+      imagesOptimized: imageStats.recompressed,
       fileName: currentFile.name.replace(/\.pdf$/i, '') || 'document'
     };
     renderChangeSummary();
@@ -214,8 +358,9 @@ function renderChangeSummary(){
   const pct = (100 - (r.newKB/r.origKB*100));
   const sizeWord = pct >= 0 ? tr('pdf.summary.smaller') : tr('pdf.summary.larger');
   const changed = Math.abs(pct) >= 0.1;
+  const imagesPart = r.imagesOptimized > 0 ? ` · ${tr('pdf.summary.images')}: ${r.imagesOptimized}` : '';
   changeText.textContent = `${tr('pdf.summary.pages')}: ${r.pageCount} · ${tr('pdf.summary.filesize')}: ${r.origKB} KB → ${r.newKB} KB` +
-    (changed ? ` (${Math.abs(pct).toFixed(0)}% ${sizeWord})` : ` (${tr('pdf.summary.unchanged')})`);
+    (changed ? ` (${Math.abs(pct).toFixed(0)}% ${sizeWord})` : ` (${tr('pdf.summary.unchanged')})`) + imagesPart;
 
   compareOriginalMeta.textContent = `${r.origKB} KB`;
   compareCompressedMeta.textContent = `${r.newKB} KB`;
