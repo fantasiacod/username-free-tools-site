@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="blog.title">Blog — Code Engineer</title>
+<meta name="description" content="Practical, no-fluff guides for getting more out of free browser-based tools — starting with how to shrink a PDF without losing quality." data-i18n-content="blog.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/blog/index.html">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="./index.html" data-i18n="nav.blog">Blog</a>
+      <a href="../about.html" data-i18n="nav.about">About</a>
+      <a href="../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="hero">
+      <h1 data-i18n="blog.h1">Blog</h1>
+      <p data-i18n="blog.intro">Short, practical guides on getting the most out of the free tools on this site — no filler, just what actually works.</p>
+    </section>
+
+    <div class="grid">
+      <a class="card" href="./how-to-compress-a-pdf-without-losing-quality/index.html">
+        <div class="icon">📄</div>
+        <h3 data-i18n="blog.post1.title">How to Compress a PDF for Free Without Losing Quality</h3>
+        <p data-i18n="blog.post1.desc">A practical walkthrough of shrinking a PDF's file size while keeping it readable, plus what actually makes PDFs huge in the first place.</p>
+        <span class="badge" data-i18n="blog.post1.date">September 9, 2026</span>
+      </a>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot.home">Ad space (reserved — will be enabled once an ad network is approved)</div>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../terms.html" data-i18n="footer.terms">Terms</a> ·
+      <a href="../about.html" data-i18n="nav.about">About</a> ·
+      <a href="../contact.html" data-i18n="nav.contact">Contact</a>
+    </div>
+  </div>
+</footer>
+<script src="../assets/i18n.js"></script>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
