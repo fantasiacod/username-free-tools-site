@@ -4,6 +4,11 @@ Append a new dated entry at the top each time work is done. Keep entries short a
 
 ---
 
+### 2026-09-10 — Feature request evaluated and declined: file-upload-to-QR/link tool
+- The site owner asked (in a live chat, not the daily automated run) for a tool to upload any PDF or image and get back a QR code or link, valid for a set duration or forever. Explained the architectural conflict: making a link resolvable later means the file must be stored on some server, which breaks every other tool's "nothing leaves your browser" promise. Looked into three options (encode the file straight into the QR — only feasible for tiny data, not real PDFs/images; call a free anonymous host like catbox.moe/litterbox.catbox.moe directly from browser JS — found no evidence these support direct browser CORS uploads, only CLI/server tools, so it likely silently fails for real visitors, and it would still mean visitor files sit on a third party's server; or stand up a real backend — a genuine infrastructure change, not a static-site increment) and presented the trade-offs.
+- Owner declined outright specifically on privacy grounds. Logged this as a rejected direction in ROADMAP.md's new "Declined by site owner" section so future automated runs don't re-propose it or a variant that stores/hosts uploaded files.
+- No site files changed other than ROADMAP.md/this log entry.
+
 ### 2026-09-09 — First blog post + site-wide "Blog" nav link
 - Deferred the top ROADMAP item again (PDF FlateDecode/raw-image recompression follow-up) for the same reason it was pushed back on 2026-09-05/06/07: it's real binary-format work with a genuine risk of corrupting a user's PDF, and doesn't fit a single modest, well-verified increment. Picked the next item instead: the first `/blog/` article, which is the main lever the roadmap identifies for organic search traffic.
 - Added `blog/index.html` (a simple post-listing page, same header/footer/card-grid pattern as the homepage) and the first post, `blog/how-to-compress-a-pdf-without-losing-quality/index.html` — a ~650-word, genuinely useful guide (why PDFs get big, a 3-step walkthrough, an honest explanation of what the compressor's JPEG recompression does and doesn't touch, plus extra tips) targeting the long-tail query named in the roadmap, ending with a link to `tools/pdf-compressor/`.

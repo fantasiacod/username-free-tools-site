@@ -33,6 +33,10 @@ a daily scheduled task (see `PROGRESS.md` for the log of what's already been don
 - [ ] Create a Gumroad product for a "Pro" tier (idea: remove the reserved ad space + unlock a couple of extra tool options, sold as a one-time small purchase or "pay what you want"). Share the Gumroad product link so it can be wired into a "Go Pro" button.
 - [ ] (Optional, later) Buy a short custom domain once there's some traffic, and point it at GitHub Pages via a CNAME file — improves trust/SEO and ad network approval odds vs. the default github.io subdomain.
 
+## ❌ Declined by site owner (do not propose or build these)
+
+- File upload → shareable QR/link tool ("upload any PDF or image, get a QR or link that works for a set duration or forever"): proposed 2026-09-10, declined by the site owner the same day specifically because it would require the visitor's file to leave their device and sit on a server (ours or a third party's) to make a link/QR resolvable later — this breaks the site's core privacy promise ("nothing you upload ever leaves your browser"), which every existing tool and the privacy policy rely on. Do not re-propose this or any variant that stores/hosts a user's uploaded file, even via a free third-party host — it's a rejected direction, not an open task.
+
 ## Done
 
 - [x] Initial site scaffold: homepage, QR Code Generator (live), Image Converter & Compressor (live), About/Contact/Privacy/Terms pages, robots.txt, sitemap.xml.
