@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="blogpost2.title">How to Make a QR Code for a Wi-Fi Password | Code Engineer</title>
+<meta name="description" content="Generate a free QR code that lets guests join your Wi-Fi instantly by scanning with their phone camera — no app, no typing a long password." data-i18n-content="blogpost2.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/blog/qr-code-for-wifi-password/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../index.html" data-i18n="nav.blog">Blog</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="blogpost2.h1">How to Make a QR Code for a Wi-Fi Password</h1>
+      <p class="note" data-i18n="blogpost2.date">September 10, 2026</p>
+
+      <div class="content">
+        <p data-i18n="blogpost2.p.intro">Reading out a 20-character Wi-Fi password letter by letter, or watching a guest mistype it three times, is a small but very avoidable annoyance. Most phones have supported scanning a QR code straight into their Wi-Fi settings since around 2019 — no app required — and you can generate one for free, right in your browser, in under a minute.</p>
+
+        <h2 data-i18n="blogpost2.h2.format">The trick: a text format phones already understand</h2>
+        <p data-i18n="blogpost2.p.format">A Wi-Fi QR code isn't a special kind of QR code — it's a regular QR code that encodes a specific line of text, which phone camera apps recognize and offer to join automatically. The format looks like this:</p>
+        <p><code data-i18n="blogpost2.code.example">WIFI:T:WPA;S:YourNetworkName;P:YourPassword;;</code></p>
+        <p data-i18n="blogpost2.p.formatexplain">Each part means something specific:</p>
+        <ul>
+          <li data-i18n="blogpost2.format.t">T is the security type: WPA for WPA, WPA2 or WPA3 (almost every home router made in the last decade), WEP for very old routers, or nopass for an open network with no password.</li>
+          <li data-i18n="blogpost2.format.s">S is your network name (SSID), typed exactly as it appears, including capital letters.</li>
+          <li data-i18n="blogpost2.format.p">P is the password. For a nopass network, leave this part out entirely along with the P: — don't leave it blank.</li>
+          <li data-i18n="blogpost2.format.escape">If your network name or password itself contains a semicolon, comma, colon or backslash, put a backslash right before each one (for example My\;Network) so phones don't misread the boundaries between fields.</li>
+        </ul>
+
+        <h2 data-i18n="blogpost2.h2.steps">Steps (free, no signup, no app)</h2>
+        <ol>
+          <li data-i18n="blogpost2.steps.1">Build your own line using the format above — swap in your real network name after S: and your real password after P:, keeping the semicolons exactly where they are.</li>
+          <li data-i18n="blogpost2.steps.2">Open the QR Code Generator, paste that line into the text box, pick a size, and click Generate.</li>
+          <li data-i18n="blogpost2.steps.3">Download the PNG. Print it and stick it near your router or entryway, or just show the image on a screen — any modern phone camera pointed at it will recognize it as a Wi-Fi network and offer a one-tap Join button.</li>
+          <li data-i18n="blogpost2.steps.4">Test it yourself with your own phone before you print it or hand it to a guest, so you catch any typo in the network name or password first.</li>
+        </ol>
+
+        <h2 data-i18n="blogpost2.h2.notes">A few things worth knowing</h2>
+        <ul>
+          <li data-i18n="blogpost2.notes.1">This works with the plain camera app on iOS 11+ and Android 10+ — no extra scanner app needed. Older phones may need a dedicated QR scanner app instead, which will usually still read it correctly.</li>
+          <li data-i18n="blogpost2.notes.2">For a hidden network (one that doesn't broadcast its name), add H:true; right before the final double semicolon, e.g. WIFI:T:WPA;S:YourNetworkName;P:YourPassword;H:true;;</li>
+          <li data-i18n="blogpost2.notes.3">The QR code encodes your password as plain text, so it's exactly as sensitive as the password itself — fine to stick on your fridge for house guests, not something to post somewhere the general public can photograph if you'd rather they not have your Wi-Fi.</li>
+        </ul>
+
+        <p data-i18n="blogpost2.p.cta">Ready to build yours? Paste your own WIFI: line into the generator and download the code in seconds.</p>
+        <p><a href="../../tools/qr-generator/index.html" data-i18n="blogpost2.cta.link">Try the free QR Code Generator →</a></p>
+      </div>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+<script src="../../assets/i18n.js"></script>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
