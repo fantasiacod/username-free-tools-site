@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="b64.title">Free Base64 Encoder & Decoder | Code Engineer</title>
+<meta name="description" content="Encode text to Base64 or decode Base64 back to text, and convert any file to a Base64 data URI, free, right in your browser. No signup, nothing uploaded." data-i18n-content="b64.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/base64-converter/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../../blog/index.html" data-i18n="nav.blog">Blog</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="b64.h1">Base64 Encoder &amp; Decoder</h1>
+      <p class="desc" data-i18n="b64.desc">Paste text below and click Encode to convert it to Base64, or paste Base64 and click Decode to get the original text back. Full Unicode/UTF-8 text is supported. Nothing you type is sent anywhere.</p>
+
+      <textarea id="b64-input" placeholder="Type or paste text or Base64 here..." data-i18n-placeholder="b64.placeholder" style="width:100%;min-height:200px;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:14px;font-size:13.5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical;white-space:pre;overflow-wrap:break-word"></textarea>
+
+      <div class="controls">
+        <button id="btn-encode" data-i18n="b64.btn.encode">Encode</button>
+        <button id="btn-decode" class="secondary" data-i18n="b64.btn.decode">Decode</button>
+        <button id="btn-copy" class="secondary" data-i18n="b64.btn.copy">Copy</button>
+        <button id="btn-clear" class="secondary" data-i18n="b64.btn.clear">Clear</button>
+      </div>
+
+      <p class="note" id="b64-status"></p>
+    </div>
+
+    <div class="tool-panel" style="margin-top:22px">
+      <h2 style="margin-top:0;font-size:19px" data-i18n="b64.h2.file">Convert a file to Base64 (data URI)</h2>
+      <p class="desc" data-i18n="b64.file.desc">Choose any file to see its Base64-encoded data URI, ready to paste into CSS, HTML, JSON, or anywhere else a data URI is accepted. The file is read locally — it's never uploaded anywhere.</p>
+
+      <div class="dropzone" id="b64-dropzone">
+        <div id="b64-dz-label" data-i18n="b64.file.dz.label">Click to choose a file, or drag &amp; drop it here</div>
+        <input type="file" id="b64-file-input">
+      </div>
+      <p class="note" id="b64-file-info"></p>
+
+      <textarea id="b64-file-output" readonly placeholder="" style="width:100%;min-height:140px;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:14px;margin-top:12px;font-size:12.5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical;white-space:pre;overflow-wrap:break-word;display:none"></textarea>
+
+      <div class="controls" id="b64-file-controls" style="display:none;margin-top:12px">
+        <button id="btn-file-copy" class="secondary" data-i18n="b64.file.btn.copy">Copy data URI</button>
+      </div>
+
+      <p class="note" data-i18n="b64.file.warning">Base64 text is about 33% larger than the original file, and very large files can make the browser tab slow — this works best for small-to-medium files like icons, small images, or short documents.</p>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+
+    <section class="content">
+      <h2 data-i18n="b64.h2.how">How Base64 encoding works</h2>
+      <p data-i18n="b64.p.how">Base64 turns arbitrary binary data (or text) into a string using only 64 printable characters (A-Z, a-z, 0-9, + and /), which makes it safe to embed inside formats that only handle plain text, such as JSON, XML, email (MIME), or a CSS/HTML data URI. This tool uses your browser's built-in <code>btoa</code>/<code>atob</code> functions together with <code>TextEncoder</code>/<code>TextDecoder</code> for correct handling of non-English (UTF-8) text, and <code>FileReader</code> for converting files — no external library is loaded and nothing is uploaded to a server.</p>
+      <h2 data-i18n="b64.h2.when">When you'd use a Base64 converter</h2>
+      <p data-i18n="b64.p.when">Base64 shows up constantly in web development and everyday tech tasks: embedding a small image directly inside CSS or HTML without a separate file request, decoding an API token or JWT payload to see what's inside, reading a Base64-encoded email attachment, or passing binary data through a system (like a URL or JSON field) that only accepts text safely.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../../assets/i18n.js"></script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+const input = document.getElementById('b64-input');
+const statusEl = document.getElementById('b64-status');
+
+function t(key){
+  const lang = (window.QTH_I18N && QTH_I18N.getLang()) || 'en';
+  return (window.QTH_I18N && QTH_I18N.t(key, lang)) || key;
+}
+
+function b64EncodeUnicode(str){
+  const bytes = new TextEncoder().encode(str);
+  let binary = '';
+  bytes.forEach(function(b){ binary += String.fromCharCode(b); });
+  return btoa(binary);
+}
+
+function b64DecodeUnicode(str){
+  const cleaned = str.replace(/\s+/g, '');
+  const binary = atob(cleaned);
+  const bytes = Uint8Array.from(binary, function(c){ return c.charCodeAt(0); });
+  return new TextDecoder('utf-8', { fatal: false }).decode(bytes);
+}
+
+function showError(key){
+  statusEl.textContent = t(key);
+  statusEl.style.color = '#f87171';
+}
+
+function showSuccess(key){
+  statusEl.textContent = t(key);
+  statusEl.style.color = 'var(--accent-2)';
+}
+
+function encodeText(){
+  const raw = input.value;
+  if(!raw){ showError('b64.error.empty'); return; }
+  try {
+    input.value = b64EncodeUnicode(raw);
+    showSuccess('b64.status.encoded');
+  } catch(err){
+    showError('b64.error.encode');
+  }
+}
+
+function decodeText(){
+  const raw = input.value;
+  if(!raw){ showError('b64.error.empty'); return; }
+  try {
+    input.value = b64DecodeUnicode(raw);
+    showSuccess('b64.status.decoded');
+  } catch(err){
+    showError('b64.error.decode');
+  }
+}
+
+document.getElementById('btn-encode').addEventListener('click', encodeText);
+document.getElementById('btn-decode').addEventListener('click', decodeText);
+document.getElementById('btn-copy').addEventListener('click', function(){
+  if(!input.value) return;
+  navigator.clipboard.writeText(input.value).then(function(){
+    const btn = document.getElementById('btn-copy');
+    const original = btn.textContent;
+    btn.textContent = t('b64.btn.copied');
+    setTimeout(function(){ btn.textContent = original; }, 1200);
+  }).catch(function(){});
+});
+document.getElementById('btn-clear').addEventListener('click', function(){
+  input.value = '';
+  statusEl.textContent = '';
+  input.focus();
+});
+
+document.addEventListener('qth-lang-changed', function(){
+  if(statusEl.textContent) statusEl.textContent = '';
+});
+
+// --- File to Base64 (data URI) ---
+const dropzone = document.getElementById('b64-dropzone');
+const dzLabel = document.getElementById('b64-dz-label');
+const fileInput = document.getElementById('b64-file-input');
+const fileInfo = document.getElementById('b64-file-info');
+const fileOutput = document.getElementById('b64-file-output');
+const fileControls = document.getElementById('b64-file-controls');
+let lastFileMeta = null;
+
+dropzone.addEventListener('click', function(){ fileInput.click(); });
+dropzone.addEventListener('dragover', function(e){ e.preventDefault(); dropzone.classList.add('drag'); });
+dropzone.addEventListener('dragleave', function(){ dropzone.classList.remove('drag'); });
+dropzone.addEventListener('drop', function(e){
+  e.preventDefault();
+  dropzone.classList.remove('drag');
+  if(e.dataTransfer.files.length) loadFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', function(){
+  if(fileInput.files && fileInput.files[0]) loadFile(fileInput.files[0]);
+});
+
+function loadFile(file){
+  const reader = new FileReader();
+  reader.onload = function(){
+    fileOutput.value = reader.result;
+    fileOutput.style.display = 'block';
+    fileControls.style.display = 'flex';
+    dzLabel.textContent = file.name + ' ' + t('b64.file.dz.loaded');
+    const kb = (file.size / 1024).toFixed(1);
+    lastFileMeta = { name: file.name, kb: kb, type: file.type || t('b64.file.unknownType') };
+    renderFileInfo();
+  };
+  reader.onerror = function(){
+    fileInfo.textContent = t('b64.file.error');
+    fileInfo.style.color = '#f87171';
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderFileInfo(){
+  if(!lastFileMeta) return;
+  fileInfo.style.color = 'var(--muted)';
+  fileInfo.textContent = lastFileMeta.name + ' · ' + lastFileMeta.kb + ' KB · ' + lastFileMeta.type;
+}
+
+document.getElementById('btn-file-copy').addEventListener('click', function(){
+  if(!fileOutput.value) return;
+  navigator.clipboard.writeText(fileOutput.value).then(function(){
+    const btn = document.getElementById('btn-file-copy');
+    const original = btn.textContent;
+    btn.textContent = t('b64.btn.copied');
+    setTimeout(function(){ btn.textContent = original; }, 1200);
+  }).catch(function(){});
+});
+
+document.addEventListener('qth-lang-changed', renderFileInfo);
+</script>
+</body>
+</html>
