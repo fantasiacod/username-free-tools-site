@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="blogpost3.title">Why Is My JSON Invalid? Common Errors and How to Fix Them | Code Engineer</title>
+<meta name="description" content="The seven most common reasons JSON fails to parse — trailing commas, single quotes, unquoted keys and more — with quick fixes for each, plus a free validator to pinpoint the exact line." data-i18n-content="blogpost3.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/blog/why-is-my-json-invalid/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../index.html" data-i18n="nav.blog">Blog</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="blogpost3.h1">Why Is My JSON Invalid? Common Errors and How to Fix Them</h1>
+      <p class="note" data-i18n="blogpost3.date">September 11, 2026</p>
+
+      <div class="content">
+        <p data-i18n="blogpost3.p.intro">"Unexpected token" is one of the least helpful error messages in programming — it tells you something is wrong without telling you what. The good news is that almost every broken JSON file fails for one of a small handful of reasons, and once you know what to look for, most are a five-second fix.</p>
+
+        <h2 data-i18n="blogpost3.h2.rules">JSON's rules are stricter than JavaScript's</h2>
+        <p data-i18n="blogpost3.p.rules">JSON looks like a JavaScript object literal, which is exactly why it trips people up — JavaScript itself is far more forgiving than the JSON spec. Code you can paste straight into a browser console often isn't valid JSON at all. Here are the mistakes that cause almost every "invalid JSON" error.</p>
+
+        <h2 data-i18n="blogpost3.h2.trailing">1. A trailing comma</h2>
+        <p data-i18n="blogpost3.p.trailing">This is by far the most common one. JavaScript allows a comma after the last item in an object or array; JSON does not.</p>
+        <p><code data-i18n="blogpost3.code.trailing">{"name": "Alex", "age": 30,}</code></p>
+        <p data-i18n="blogpost3.p.trailingfix">Delete the comma right before the closing <code>}</code> or <code>]</code>. This happens constantly when you add a field to the end of an object and forget the old last line already had a comma, or delete a field and leave the comma dangling.</p>
+
+        <h2 data-i18n="blogpost3.h2.quotes">2. Single quotes instead of double quotes</h2>
+        <p data-i18n="blogpost3.p.quotes">JSON strings and keys must use double quotes (<code>"</code>). Single quotes (<code>'</code>), which JavaScript accepts fine, are not valid JSON.</p>
+        <p><code data-i18n="blogpost3.code.quotes">{'name': 'Alex'}</code></p>
+        <p data-i18n="blogpost3.p.quotesfix">Replace every single quote around a key or string value with a double quote. If the string itself contains a double quote, escape it as <code>\"</code>.</p>
+
+        <h2 data-i18n="blogpost3.h2.keys">3. Unquoted keys</h2>
+        <p data-i18n="blogpost3.p.keys">In JavaScript you can write <code>{name: "Alex"}</code> and it works. In JSON, every key must be a quoted string, no exceptions.</p>
+        <p><code data-i18n="blogpost3.code.keys">{name: "Alex"}</code></p>
+        <p data-i18n="blogpost3.p.keysfix">Wrap every key in double quotes: <code>{"name": "Alex"}</code>.</p>
+
+        <h2 data-i18n="blogpost3.h2.comments">4. Comments</h2>
+        <p data-i18n="blogpost3.p.comments">JSON has no comment syntax at all — not <code>//</code>, not <code>/* */</code>. If a config file or API sample you copied includes explanatory comments, that alone makes it invalid JSON.</p>
+        <p data-i18n="blogpost3.p.commentsfix">Delete every comment before parsing. If you need documentation alongside config data, that's usually a sign the file should be something other than plain JSON (like JSON5, YAML, or JSON with a separate README).</p>
+
+        <h2 data-i18n="blogpost3.h2.escape">5. Unescaped special characters inside a string</h2>
+        <p data-i18n="blogpost3.p.escape">A raw newline, tab, or unescaped double quote sitting inside a string value breaks the parser, because JSON strings must live on a single logical line with special characters written as escape sequences.</p>
+        <p data-i18n="blogpost3.p.escapefix">Use <code>\n</code> for a newline, <code>\t</code> for a tab, and <code>\"</code> for a double quote inside a string, instead of a literal line break or unescaped quote character.</p>
+
+        <h2 data-i18n="blogpost3.h2.values">6. Values JSON doesn't support</h2>
+        <p data-i18n="blogpost3.p.values">JSON only allows strings, numbers, objects, arrays, <code>true</code>, <code>false</code> and <code>null</code> as values. JavaScript-only values like <code>undefined</code>, a function, a Date object, or <code>NaN</code> are not valid JSON and will fail to parse.</p>
+        <p data-i18n="blogpost3.p.valuesfix">Replace them with a JSON-safe equivalent — for example store a date as an ISO string like <code>"2026-09-11"</code> rather than a Date object, and use <code>null</code> instead of <code>undefined</code>.</p>
+
+        <h2 data-i18n="blogpost3.h2.brackets">7. A missing or mismatched bracket</h2>
+        <p data-i18n="blogpost3.p.brackets">Every <code>{</code> needs a matching <code>}</code>, and every <code>[</code> needs a matching <code>]</code>. This is easy to get wrong by hand in a deeply nested structure, and it's usually what's actually happening when the error points at the very end of the file.</p>
+        <p data-i18n="blogpost3.p.bracketsfix">Work from the innermost object or array outward and count brackets, or better, let a formatter do it — pretty-printed, correctly indented JSON makes an unclosed bracket visually obvious in a way a single unbroken line never will.</p>
+
+        <h2 data-i18n="blogpost3.h2.tool">Let the browser find it for you</h2>
+        <p data-i18n="blogpost3.p.tool">Scanning a long JSON document by eye for one of these seven mistakes is slow and error-prone. Paste it into the JSON Formatter &amp; Validator instead — it runs your browser's own JSON parser and, when something's wrong, shows you the approximate line and column where it broke, so you can jump straight to the problem instead of guessing.</p>
+
+        <p data-i18n="blogpost3.p.cta">Paste your JSON in and get an exact error location in under a second.</p>
+        <p><a href="../../tools/json-formatter/index.html" data-i18n="blogpost3.cta.link">Try the free JSON Formatter &amp; Validator →</a></p>
+      </div>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+<script src="../../assets/i18n.js"></script>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
