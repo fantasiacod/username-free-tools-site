@@ -39,6 +39,8 @@
       "badge.soon": "Coming soon",
       "home.content.h2": "Why Code Engineer?",
       "home.content.p": "Most “free” tools online ask you to upload your files to a stranger's server. Every tool on Code Engineer runs entirely client-side, in your own browser, using standard web APIs — your files never leave your device. That also means the tools work instantly, with no waiting on an upload or download queue.",
+      "home.blog.h2": "From the blog",
+      "home.blog.viewall": "View all posts →",
 
       "about.title": "About — Code Engineer",
       "about.meta": "Code Engineer is a growing collection of free, browser-based tools. Learn what we're building and why everything runs client-side.",
@@ -423,6 +425,8 @@
       "badge.soon": "قريبًا",
       "home.content.h2": "ليش مهندس كود؟",
       "home.content.p": "أغلب الأدوات “المجانية” على الإنترنت تطلب منك رفع ملفاتك على سيرفر مجهول. كل أداة في مهندس كود تعمل بالكامل داخل متصفحك باستخدام تقنيات ويب قياسية — ملفاتك لا تغادر جهازك أبدًا. وهذا يعني أيضًا أن الأدوات تعمل فورًا بدون انتظار رفع أو تحميل.",
+      "home.blog.h2": "من المدونة",
+      "home.blog.viewall": "عرض كل المقالات ←",
 
       "about.title": "من نحن — مهندس كود",
       "about.meta": "مهندس كود مجموعة متنامية من الأدوات المجانية التي تعمل داخل المتصفح. تعرّف على ما نبنيه ولماذا كل شي يعمل من جهتك.",
