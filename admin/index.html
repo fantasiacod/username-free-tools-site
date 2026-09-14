@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin Panel | Code Engineer</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<style>
+  .admin-row{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:12px 14px;border:1px solid var(--border);border-radius:8px;
+    background:var(--panel-2);margin-top:8px;
+  }
+  .admin-row .label{font-size:14px;color:var(--text)}
+  .admin-row .sub{font-size:12px;color:var(--muted);margin-top:2px}
+  .admin-row.is-hidden{opacity:.55}
+  .pill{font-size:11px;padding:2px 9px;border-radius:999px;border:1px solid var(--border);color:var(--muted)}
+  .pill.visible{color:var(--accent-2);border-color:var(--accent-2)}
+  .pill.hidden{color:#f87171;border-color:#f87171}
+  .section-title{font-size:15px;color:var(--muted);margin:24px 0 4px;text-transform:uppercase;letter-spacing:.04em}
+  #login-error{color:#f87171;font-size:13.5px;margin-top:10px;min-height:1.2em}
+  #panel-error{color:#f87171;font-size:13.5px;margin-top:14px}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span>Code Engineer — Admin</span></a></div>
+    <nav class="site" id="nav-actions"></nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <div id="login-view" class="tool-panel" style="display:none">
+      <h1 style="margin-top:0">Admin Login</h1>
+      <p class="desc">This panel controls what's visible on the site. Access is protected by a password only you know (never stored in the code).</p>
+      <div class="controls" style="margin-top:4px">
+        <label style="min-width:280px">
+          <span>Password</span>
+          <input id="login-password" type="password" autocomplete="current-password" style="width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px;font-size:14px">
+        </label>
+      </div>
+      <div class="controls">
+        <button type="button" id="btn-login">Log In</button>
+      </div>
+      <p id="login-error"></p>
+    </div>
+
+    <div id="dashboard-view" style="display:none">
+      <div class="tool-panel">
+        <h1 style="margin-top:0">Site Control Panel</h1>
+        <p class="desc">Show or hide any tool or blog post from the site's listings. Hiding a card never deletes the page — it just removes it from the homepage/blog grid (and, for now, the page stays reachable by direct link). Changes commit straight to the live repo and go live within about a minute once Vercel redeploys.</p>
+
+        <div id="loading-cards" class="note">Loading current visibility…</div>
+        <div id="cards-error" class="note" style="color:#f87171;display:none"></div>
+
+        <div id="home-cards"></div>
+        <div id="blog-cards"></div>
+
+        <p id="panel-error"></p>
+      </div>
+
+      <div class="tool-panel" style="margin-top:20px">
+        <h2 style="margin-top:0;font-size:19px">Coming next to this panel</h2>
+        <p class="desc" style="margin-bottom:0">Adding blog posts, changing the accent color, and uploading a new logo are planned as the next additions here — each will get the same careful, tested treatment as this visibility control. For now those still go through chat, same as always.</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> Code Engineer — internal admin panel, not linked publicly</div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+const loginView = document.getElementById('login-view');
+const dashboardView = document.getElementById('dashboard-view');
+const navActions = document.getElementById('nav-actions');
+
+function renderLogoutButton() {
+  navActions.innerHTML = '';
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.textContent = 'Log Out';
+  btn.style.cssText = 'background:var(--panel-2);border:1px solid var(--border);color:var(--text);font-size:13px;padding:6px 14px;border-radius:999px;cursor:pointer';
+  btn.addEventListener('click', async () => {
+    await fetch('/api/admin/logout', { method: 'POST' });
+    location.reload();
+  });
+  navActions.appendChild(btn);
+}
+
+async function checkSession() {
+  try {
+    const res = await fetch('/api/admin/session');
+    const data = await res.json();
+    return !!data.authenticated;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function showLogin() {
+  loginView.style.display = 'block';
+  dashboardView.style.display = 'none';
+  navActions.innerHTML = '';
+}
+
+async function showDashboard() {
+  loginView.style.display = 'none';
+  dashboardView.style.display = 'block';
+  renderLogoutButton();
+  await loadCards();
+}
+
+document.getElementById('btn-login').addEventListener('click', async () => {
+  const pw = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.textContent = '';
+  if (!pw) { errEl.textContent = 'Enter your password.'; return; }
+  const btn = document.getElementById('btn-login');
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw }),
+    });
+    if (res.ok) {
+      await showDashboard();
+    } else {
+      const data = await res.json().catch(() => ({}));
+      errEl.textContent = data.error === 'invalid_password' ? 'Wrong password.' : 'Login failed — try again.';
+    }
+  } catch (e) {
+    errEl.textContent = 'Network error — try again.';
+  } finally {
+    btn.disabled = false;
+  }
+});
+document.getElementById('login-password').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('btn-login').click();
+});
+
+const LISTING_LABELS = { home: 'Homepage tools & blog teasers', blog: 'Blog index' };
+
+function friendlyName(id) {
+  return id
+    .replace(/^tools-/, '')
+    .replace(/^blog-/, '')
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
+async function loadCards() {
+  const loadingEl = document.getElementById('loading-cards');
+  const errEl = document.getElementById('cards-error');
+  const homeEl = document.getElementById('home-cards');
+  const blogEl = document.getElementById('blog-cards');
+  loadingEl.style.display = 'block';
+  errEl.style.display = 'none';
+  homeEl.innerHTML = '';
+  blogEl.innerHTML = '';
+
+  try {
+    const res = await fetch('/api/admin/visibility');
+    if (res.status === 401) { await showLogin(); return; }
+    const data = await res.json();
+    if (!res.ok || !data.ok) throw new Error((data && data.message) || 'Failed to load');
+
+    loadingEl.style.display = 'none';
+
+    renderListing(homeEl, 'home', data.cards.home || []);
+    renderListing(blogEl, 'blog', data.cards.blog || []);
+  } catch (e) {
+    loadingEl.style.display = 'none';
+    errEl.style.display = 'block';
+    errEl.textContent = 'Could not load current visibility: ' + e.message;
+  }
+}
+
+function renderListing(container, listing, cards) {
+  const title = document.createElement('div');
+  title.className = 'section-title';
+  title.textContent = LISTING_LABELS[listing] || listing;
+  container.appendChild(title);
+
+  if (!cards.length) {
+    const empty = document.createElement('p');
+    empty.className = 'note';
+    empty.textContent = 'Nothing found here.';
+    container.appendChild(empty);
+    return;
+  }
+
+  cards.forEach((card) => {
+    const row = document.createElement('div');
+    row.className = 'admin-row' + (card.hidden ? ' is-hidden' : '');
+
+    const left = document.createElement('div');
+    const label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = friendlyName(card.id);
+    const sub = document.createElement('div');
+    sub.className = 'sub';
+    sub.textContent = card.id;
+    left.appendChild(label);
+    left.appendChild(sub);
+
+    const right = document.createElement('div');
+    right.style.cssText = 'display:flex;align-items:center;gap:10px';
+
+    const pill = document.createElement('span');
+    pill.className = 'pill ' + (card.hidden ? 'hidden' : 'visible');
+    pill.textContent = card.hidden ? 'Hidden' : 'Visible';
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'secondary';
+    btn.textContent = card.hidden ? 'Show' : 'Hide';
+    btn.addEventListener('click', () => toggleCard(listing, card.id, !card.hidden, btn, row, pill));
+
+    right.appendChild(pill);
+    right.appendChild(btn);
+    row.appendChild(left);
+    row.appendChild(right);
+    container.appendChild(row);
+  });
+}
+
+async function toggleCard(listing, id, hidden, btn, row, pill) {
+  const errEl = document.getElementById('panel-error');
+  errEl.textContent = '';
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = 'Saving…';
+  try {
+    const res = await fetch('/api/admin/visibility', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ file: listing, id: id, hidden: hidden }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.status === 401) { await showLogin(); return; }
+    if (!res.ok || !data.ok) throw new Error(data.error || 'save_failed');
+
+    row.classList.toggle('is-hidden', hidden);
+    pill.className = 'pill ' + (hidden ? 'hidden' : 'visible');
+    pill.textContent = hidden ? 'Hidden' : 'Visible';
+    btn.textContent = hidden ? 'Show' : 'Hide';
+  } catch (e) {
+    btn.textContent = originalText;
+    errEl.textContent = 'Could not save that change: ' + e.message + '. Try again.';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+(async function init() {
+  const authed = await checkSession();
+  if (authed) {
+    await showDashboard();
+  } else {
+    await showLogin();
+  }
+})();
+</script>
+</body>
+</html>
