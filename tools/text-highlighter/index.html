@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="hl.title">Free Text Highlighter &amp; Marker | Code Engineer</title>
+<meta name="description" content="Highlight, bold, underline or strike through any part of your text right in the browser, then copy it formatted or as plain text with markdown-style symbols. Free, no signup, nothing leaves your device." data-i18n-content="hl.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/text-highlighter/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+<style>
+  .hl-toolbar{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:4px}
+  .hl-group{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .hl-group-label{font-size:12.5px;color:var(--muted);margin-inline-end:2px}
+  .hl-swatch{
+    width:26px;height:26px;border-radius:50%;border:1px solid var(--border);
+    padding:0;cursor:pointer;box-shadow:inset 0 0 0 2px var(--panel);
+  }
+  .hl-swatch:hover{border-color:var(--accent)}
+  #hl-editor{
+    width:100%;min-height:220px;background:var(--panel-2);border:1px solid var(--border);
+    color:var(--text);border-radius:8px;padding:14px;margin-top:16px;font-size:15px;
+    line-height:1.6;overflow-wrap:break-word;
+  }
+  #hl-editor:focus{outline:2px solid var(--accent);outline-offset:1px}
+  #hl-editor:empty:before{content:attr(data-placeholder);color:var(--muted)}
+  #hl-editor mark, #hl-editor font[color]{border-radius:2px;padding:0 1px}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../../blog/index.html" data-i18n="nav.blog">Blog</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="hl.h1">Text Highlighter &amp; Marker</h1>
+      <p class="desc" data-i18n="hl.desc">Paste or type your text below, select any part of it, then click a button to highlight, bold, underline or strike it through. Copy the result as formatted rich text (ready to paste into an email or document) or as plain text with **bold**, __underline__, ~~strikethrough~~ and ==highlight== markers.</p>
+
+      <div class="hl-toolbar">
+        <div class="hl-group">
+          <span class="hl-group-label" data-i18n="hl.label.highlight">Highlight:</span>
+          <button type="button" class="hl-swatch" data-color="#fff59d" title="Yellow" style="background:#fff59d"></button>
+          <button type="button" class="hl-swatch" data-color="#a5d6a7" title="Green" style="background:#a5d6a7"></button>
+          <button type="button" class="hl-swatch" data-color="#f48fb1" title="Pink" style="background:#f48fb1"></button>
+          <button type="button" class="hl-swatch" data-color="#90caf9" title="Blue" style="background:#90caf9"></button>
+          <button type="button" class="hl-swatch" data-color="#ffcc80" title="Orange" style="background:#ffcc80"></button>
+        </div>
+        <div class="hl-group">
+          <button type="button" id="btn-bold" class="secondary" data-i18n="hl.btn.bold">Bold</button>
+          <button type="button" id="btn-underline" class="secondary" data-i18n="hl.btn.underline">Underline</button>
+          <button type="button" id="btn-strike" class="secondary" data-i18n="hl.btn.strike">Strikethrough</button>
+          <button type="button" id="btn-remove-format" class="secondary" data-i18n="hl.btn.removeFormat">Remove formatting</button>
+        </div>
+      </div>
+
+      <div id="hl-editor" contenteditable="true" dir="auto" data-placeholder="Paste or type your text here, then select part of it and click a formatting button above..."></div>
+
+      <div class="controls">
+        <button type="button" id="btn-copy-rich" data-i18n="hl.btn.copyRich">Copy formatted</button>
+        <button type="button" id="btn-copy-marked" class="secondary" data-i18n="hl.btn.copyMarked">Copy as plain text</button>
+        <button type="button" id="btn-clear-all" class="secondary" data-i18n="hl.btn.clearAll">Clear all</button>
+      </div>
+
+      <p class="note" id="hl-status"></p>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+
+    <section class="content">
+      <h2 data-i18n="hl.h2.how">How this text highlighter works</h2>
+      <p data-i18n="hl.p.how">Type or paste text into the box, select any word or passage with your mouse or keyboard, then click a highlight color or a Bold/Underline/Strikethrough button to mark it — everything runs locally in your browser using standard text-editing commands, and nothing you type is uploaded anywhere. "Copy formatted" copies rich text that keeps its highlighting and styling when pasted into an email, Google Doc or Word document. "Copy as plain text" instead copies ordinary text using common markdown-style symbols (**bold**, __underline__, ~~strikethrough~~, ==highlight==) so the emphasis survives even in places that don't support rich text, like a code comment or a plain-text field.</p>
+      <h2 data-i18n="hl.h2.when">When you'd use a text highlighter</h2>
+      <p data-i18n="hl.p.when">This is handy for marking up notes or a draft before sharing it, highlighting the key sentence in a long paragraph you're pasting into an email, drawing attention to changes in feedback you're sending back to someone, or preparing text for a place that understands markdown-style emphasis. Because both a rich-text and a plain-text copy are available, the result works whether you're pasting into a document editor or a plain textbox.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../../assets/i18n.js"></script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+const editor = document.getElementById('hl-editor');
+const statusEl = document.getElementById('hl-status');
+
+function t(key){
+  const lang = (window.QTH_I18N && QTH_I18N.getLang()) || 'en';
+  return (window.QTH_I18N && QTH_I18N.t(key, lang)) || key;
+}
+
+function showStatus(key, isError){
+  statusEl.textContent = t(key);
+  statusEl.style.color = isError ? '#f87171' : 'var(--accent-2)';
+}
+
+function hasSelectionInEditor(){
+  const sel = window.getSelection();
+  if(!sel || sel.rangeCount === 0 || sel.isCollapsed) return false;
+  return editor.contains(sel.anchorNode) && editor.contains(sel.focusNode);
+}
+
+function withSelectionCheck(fn){
+  return function(){
+    if(!hasSelectionInEditor()){
+      showStatus('hl.status.selectFirst', true);
+      return;
+    }
+    fn();
+    statusEl.textContent = '';
+  };
+}
+
+// Prevent toolbar buttons from stealing the current selection before their click handler runs.
+document.querySelectorAll('.hl-toolbar button').forEach(function(btn){
+  btn.addEventListener('mousedown', function(e){ e.preventDefault(); });
+});
+
+document.querySelectorAll('.hl-swatch').forEach(function(btn){
+  btn.addEventListener('click', withSelectionCheck(function(){
+    const color = btn.getAttribute('data-color');
+    let ok = false;
+    try { ok = document.execCommand('hiliteColor', false, color); } catch(e){ ok = false; }
+    if(!ok){
+      try { document.execCommand('backColor', false, color); } catch(e){}
+    }
+  }));
+});
+
+document.getElementById('btn-bold').addEventListener('click', withSelectionCheck(function(){
+  document.execCommand('bold');
+}));
+document.getElementById('btn-underline').addEventListener('click', withSelectionCheck(function(){
+  document.execCommand('underline');
+}));
+document.getElementById('btn-strike').addEventListener('click', withSelectionCheck(function(){
+  document.execCommand('strikeThrough');
+}));
+document.getElementById('btn-remove-format').addEventListener('click', withSelectionCheck(function(){
+  document.execCommand('removeFormat');
+  try { document.execCommand('hiliteColor', false, 'transparent'); } catch(e){}
+  try { document.execCommand('backColor', false, 'transparent'); } catch(e){}
+}));
+
+document.getElementById('btn-clear-all').addEventListener('click', function(){
+  editor.innerHTML = '';
+  statusEl.textContent = '';
+  editor.focus();
+});
+
+// Convert the editor's formatted HTML into plain text with markdown-style markers.
+function htmlToMarked(root){
+  function isHighlighted(el){
+    if(el.tagName.toLowerCase() === 'font' && el.getAttribute('color')) return true;
+    const bg = el.style && el.style.backgroundColor;
+    return !!bg && bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)';
+  }
+  function walk(node){
+    let out = '';
+    node.childNodes.forEach(function(child){
+      if(child.nodeType === Node.TEXT_NODE){
+        out += child.textContent;
+        return;
+      }
+      if(child.nodeType !== Node.ELEMENT_NODE) return;
+      const tag = child.tagName.toLowerCase();
+      if(tag === 'br'){ out += '\n'; return; }
+      let inner = walk(child);
+      const isBold = tag === 'b' || tag === 'strong' || (child.style && (child.style.fontWeight === 'bold' || child.style.fontWeight === '700'));
+      const isUnderline = tag === 'u' || (child.style && child.style.textDecorationLine === 'underline');
+      const isStrike = tag === 's' || tag === 'strike' || tag === 'del' || (child.style && child.style.textDecorationLine === 'line-through');
+      if(isBold) inner = '**' + inner + '**';
+      if(isUnderline) inner = '__' + inner + '__';
+      if(isStrike) inner = '~~' + inner + '~~';
+      if(isHighlighted(child)) inner = '==' + inner + '==';
+      if(tag === 'div' || tag === 'p'){
+        out += inner + '\n';
+      } else {
+        out += inner;
+      }
+    });
+    return out;
+  }
+  return walk(root).replace(/\n{3,}/g, '\n\n').replace(/\n+$/, '');
+}
+
+function fallbackCopyText(text, successKey){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      showStatus(successKey, false);
+    }).catch(function(){
+      showStatus('hl.status.copyFailed', true);
+    });
+  } else {
+    showStatus('hl.status.copyFailed', true);
+  }
+}
+
+document.getElementById('btn-copy-rich').addEventListener('click', function(){
+  if(!editor.textContent.trim()){ showStatus('hl.status.empty', true); return; }
+  const html = editor.innerHTML;
+  const text = editor.innerText;
+  if(navigator.clipboard && window.ClipboardItem){
+    try {
+      const item = new ClipboardItem({
+        'text/html': new Blob([html], { type: 'text/html' }),
+        'text/plain': new Blob([text], { type: 'text/plain' })
+      });
+      navigator.clipboard.write([item]).then(function(){
+        showStatus('hl.status.copiedRich', false);
+      }).catch(function(){ fallbackCopyText(text, 'hl.status.copiedRich'); });
+      return;
+    } catch(e){
+      // fall through to plain-text fallback below
+    }
+  }
+  fallbackCopyText(text, 'hl.status.copiedRich');
+});
+
+document.getElementById('btn-copy-marked').addEventListener('click', function(){
+  if(!editor.textContent.trim()){ showStatus('hl.status.empty', true); return; }
+  const marked = htmlToMarked(editor);
+  fallbackCopyText(marked, 'hl.status.copiedMarked');
+});
+
+function updatePlaceholder(){
+  editor.setAttribute('data-placeholder', t('hl.placeholder'));
+}
+updatePlaceholder();
+
+document.addEventListener('qth-lang-changed', function(){
+  updatePlaceholder();
+  statusEl.textContent = '';
+});
+</script>
+</body>
+</html>
