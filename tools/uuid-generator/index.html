@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="uuid.title">Free UUID / GUID Generator | Code Engineer</title>
+<meta name="description" content="Generate random UUID v4 / GUID values instantly, one or in bulk, with optional uppercase and no-hyphens formats. Free, runs entirely in your browser, nothing is sent anywhere." data-i18n-content="uuid.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/uuid-generator/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../../blog/index.html" data-i18n="nav.blog">Blog</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="uuid.h1">UUID / GUID Generator</h1>
+      <p class="desc" data-i18n="uuid.desc">Generate random version-4 UUIDs (also called GUIDs), one at a time or in bulk. Uses your browser's built-in cryptographically secure random number generator — nothing is sent to a server.</p>
+
+      <div class="controls" style="margin-top:4px">
+        <label style="min-width:160px">
+          <span data-i18n="uuid.label.count">How many</span>
+          <input id="uuid-count" type="number" min="1" max="1000" value="1" style="width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px;font-size:14px">
+        </label>
+      </div>
+
+      <div class="controls" style="margin-top:6px">
+        <label style="flex-direction:row;align-items:center;gap:8px;font-size:14px;color:var(--text)"><input id="opt-uppercase" type="checkbox"> <span data-i18n="uuid.label.uppercase">Uppercase</span></label>
+        <label style="flex-direction:row;align-items:center;gap:8px;font-size:14px;color:var(--text)"><input id="opt-no-hyphens" type="checkbox"> <span data-i18n="uuid.label.noHyphens">No hyphens</span></label>
+        <label style="flex-direction:row;align-items:center;gap:8px;font-size:14px;color:var(--text)"><input id="opt-braces" type="checkbox"> <span data-i18n="uuid.label.braces">Wrap in braces {}</span></label>
+      </div>
+
+      <div class="controls">
+        <button id="btn-generate" data-i18n="uuid.btn.generate">Generate</button>
+        <button id="btn-copy" class="secondary" data-i18n="uuid.btn.copy">Copy all</button>
+        <button id="btn-clear" class="secondary" data-i18n="uuid.btn.clear">Clear</button>
+      </div>
+
+      <textarea id="uuid-output" readonly style="width:100%;min-height:220px;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:14px;margin-top:16px;font-size:13.5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical;white-space:pre;overflow-wrap:break-word"></textarea>
+
+      <p class="note" id="uuid-status"></p>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+
+    <section class="content">
+      <h2 data-i18n="uuid.h2.how">What is a UUID?</h2>
+      <p data-i18n="uuid.p.how">A UUID (Universally Unique Identifier), also called a GUID (Globally Unique Identifier) on Windows and in some databases, is a 128-bit value written as 32 hexadecimal digits in five groups separated by hyphens, like <code>f47ac10b-58cc-4372-a567-0e02b2c3d479</code>. This tool generates version-4 UUIDs using <code>crypto.randomUUID()</code> (or a Web Crypto fallback), where all the bits that aren't fixed by the version/variant markers are chosen randomly — the chance of two version-4 UUIDs ever colliding is astronomically small, which is exactly why they're used as identifiers instead of sequential numbers.</p>
+      <h2 data-i18n="uuid.h2.when">When you'd use a UUID generator</h2>
+      <p data-i18n="uuid.p.when">UUIDs are everywhere in software development: primary keys for database rows that need to be unique without a central counter, request/trace IDs for debugging distributed systems, session or API tokens, file and object names that must never collide, and test fixtures where you need a unique value quickly. The bulk option here is handy for seeding test data or generating a batch of IDs to paste into a script or spreadsheet.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../../assets/i18n.js"></script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+const output = document.getElementById('uuid-output');
+const statusEl = document.getElementById('uuid-status');
+const countInput = document.getElementById('uuid-count');
+const optUppercase = document.getElementById('opt-uppercase');
+const optNoHyphens = document.getElementById('opt-no-hyphens');
+const optBraces = document.getElementById('opt-braces');
+
+function t(key){
+  const lang = (window.QTH_I18N && QTH_I18N.getLang()) || 'en';
+  return (window.QTH_I18N && QTH_I18N.t(key, lang)) || key;
+}
+
+function makeUuid(){
+  if(window.crypto && typeof crypto.randomUUID === 'function'){
+    return crypto.randomUUID();
+  }
+  // Fallback: build a v4 UUID from crypto.getRandomValues
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = Array.from(bytes, function(b){ return b.toString(16).padStart(2, '0'); });
+  return hex.slice(0,4).join('') + '-' + hex.slice(4,6).join('') + '-' + hex.slice(6,8).join('') + '-' + hex.slice(8,10).join('') + '-' + hex.slice(10,16).join('');
+}
+
+function formatUuid(uuid){
+  let out = uuid;
+  if(optNoHyphens.checked) out = out.replace(/-/g, '');
+  if(optUppercase.checked) out = out.toUpperCase();
+  if(optBraces.checked) out = '{' + out + '}';
+  return out;
+}
+
+function generate(){
+  let count = parseInt(countInput.value, 10);
+  if(!count || count < 1) count = 1;
+  if(count > 1000) count = 1000;
+  countInput.value = count;
+
+  const list = [];
+  for(let i = 0; i < count; i++){
+    list.push(formatUuid(makeUuid()));
+  }
+  output.value = list.join('\n');
+  statusEl.textContent = count === 1 ? t('uuid.status.one') : t('uuid.status.many').replace('{n}', count);
+  statusEl.style.color = 'var(--accent-2)';
+}
+
+document.getElementById('btn-generate').addEventListener('click', generate);
+document.getElementById('btn-copy').addEventListener('click', function(){
+  if(!output.value) return;
+  navigator.clipboard.writeText(output.value).then(function(){
+    const btn = document.getElementById('btn-copy');
+    const original = btn.textContent;
+    btn.textContent = t('uuid.btn.copied');
+    setTimeout(function(){ btn.textContent = original; }, 1200);
+  }).catch(function(){});
+});
+document.getElementById('btn-clear').addEventListener('click', function(){
+  output.value = '';
+  statusEl.textContent = '';
+});
+
+document.addEventListener('qth-lang-changed', function(){
+  if(output.value){
+    const count = output.value.split('\n').filter(Boolean).length;
+    statusEl.textContent = count === 1 ? t('uuid.status.one') : t('uuid.status.many').replace('{n}', count);
+  }
+});
+
+generate();
+</script>
+</body>
+</html>
