@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="ts.title">Free Unix Timestamp Converter | Code Engineer</title>
+<meta name="description" content="Convert a Unix timestamp to a readable date (local time, UTC, ISO 8601, and relative time), or convert any date and time into Unix seconds and milliseconds. Free, instant, runs entirely in your browser." data-i18n-content="ts.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/timestamp-converter/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../../blog/index.html" data-i18n="nav.blog">Blog</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="ts.h1">Unix Timestamp Converter</h1>
+      <p class="desc" data-i18n="ts.desc">Convert between Unix timestamps and human-readable dates in both directions. Everything is calculated instantly in your browser as you type — nothing is sent to a server.</p>
+
+      <div class="controls" style="margin-top:4px;align-items:center">
+        <div style="font-size:14px;color:var(--text)">
+          <span data-i18n="ts.now.label">Current Unix timestamp</span>: <strong id="ts-live" dir="ltr" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px"></strong>
+        </div>
+        <button id="btn-copy-live" class="secondary" type="button" data-i18n="ts.btn.copy">Copy</button>
+      </div>
+
+      <h2 style="font-size:18px;margin:28px 0 4px" data-i18n="ts.h2.toDate">Timestamp → Date</h2>
+
+      <div class="controls">
+        <label style="min-width:220px">
+          <span data-i18n="ts.label.timestamp">Unix timestamp</span>
+          <input id="ts-input" type="text" inputmode="numeric" dir="ltr" placeholder="1758000000">
+        </label>
+        <label style="min-width:160px">
+          <span data-i18n="ts.label.unit">Unit</span>
+          <select id="ts-unit">
+            <option value="auto" data-i18n="ts.unit.auto">Auto-detect</option>
+            <option value="s" data-i18n="ts.unit.seconds">Seconds</option>
+            <option value="ms" data-i18n="ts.unit.millis">Milliseconds</option>
+          </select>
+        </label>
+        <button id="btn-use-now" class="secondary" type="button" style="align-self:flex-end" data-i18n="ts.btn.useNow">Use current time</button>
+      </div>
+
+      <div id="ts-date-rows" style="margin-top:18px;display:grid;gap:10px"></div>
+      <p class="note" id="ts-date-status"></p>
+
+      <h2 style="font-size:18px;margin:32px 0 4px" data-i18n="ts.h2.toTimestamp">Date → Timestamp</h2>
+
+      <div class="controls">
+        <label style="min-width:240px">
+          <span data-i18n="ts.label.datetime">Date &amp; time</span>
+          <input id="dt-input" type="datetime-local" step="1" dir="ltr">
+        </label>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-size:13.5px;color:var(--muted)" data-i18n="ts.label.interpret">Interpret as</span>
+          <div style="display:flex;gap:14px">
+            <label style="flex-direction:row;align-items:center;gap:6px;font-size:14px;color:var(--text)"><input type="radio" name="interpret" id="interpret-local" value="local" checked> <span data-i18n="ts.radio.local">Local time</span></label>
+            <label style="flex-direction:row;align-items:center;gap:6px;font-size:14px;color:var(--text)"><input type="radio" name="interpret" id="interpret-utc" value="utc"> <span data-i18n="ts.radio.utc">UTC</span></label>
+          </div>
+        </div>
+        <button id="btn-use-now-date" class="secondary" type="button" style="align-self:flex-end" data-i18n="ts.btn.useNowDate">Now</button>
+      </div>
+
+      <div id="dt-rows" style="margin-top:18px;display:grid;gap:10px"></div>
+      <p class="note" id="ts-dt-status"></p>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+
+    <section class="content">
+      <h2 data-i18n="ts.h2.what">What is a Unix timestamp?</h2>
+      <p data-i18n="ts.p.what">A Unix timestamp (also called Unix time, POSIX time, or epoch time) counts the number of seconds that have elapsed since midnight UTC on January 1, 1970 — the "Unix epoch" — ignoring leap seconds. It's a single integer that doesn't depend on time zone or calendar formatting, which is why databases, APIs, log files, and programming languages almost universally store dates internally as a Unix timestamp rather than a formatted string. Many systems (including JavaScript's own <code>Date.now()</code>) use milliseconds instead of seconds, so this tool auto-detects which one you've pasted based on how many digits it has, or you can set it manually.</p>
+      <h2 data-i18n="ts.h2.when">When you'd use a timestamp converter</h2>
+      <p data-i18n="ts.p.when">You'll run into raw Unix timestamps constantly while debugging: an API response with a <code>created_at</code> field that's just a long number, a log line stamped with epoch milliseconds, a JWT token's <code>exp</code> claim, or a database column storing dates as integers. This tool converts a timestamp into a readable local time, UTC time, ISO 8601 string, and a plain-English relative time ("3 hours ago") all at once, and works the other way too — pick a date and time and get back the exact Unix seconds and milliseconds, handy for building test data, API requests, or cron/scheduling logic that expects epoch time.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../../assets/i18n.js"></script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+function t(key){
+  var lang = (window.QTH_I18N && QTH_I18N.getLang()) || 'en';
+  return (window.QTH_I18N && QTH_I18N.t(key, lang)) || key;
+}
+function currentLang(){
+  return (window.QTH_I18N && QTH_I18N.getLang()) || 'en';
+}
+
+function pad(n){ return String(n).padStart(2, '0'); }
+
+function formatUTC(date){
+  return date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1) + '-' + pad(date.getUTCDate()) + ' ' +
+    pad(date.getUTCHours()) + ':' + pad(date.getUTCMinutes()) + ':' + pad(date.getUTCSeconds()) + ' UTC';
+}
+
+function formatLocal(date){
+  try {
+    return date.toLocaleString(currentLang() === 'ar' ? 'ar' : 'en-US', { dateStyle: 'full', timeStyle: 'long' });
+  } catch(e){
+    return date.toString();
+  }
+}
+
+function relativeTime(date){
+  var diffSec = Math.round((date.getTime() - Date.now()) / 1000);
+  var units = [
+    ['year', 60 * 60 * 24 * 365],
+    ['month', 60 * 60 * 24 * 30],
+    ['week', 60 * 60 * 24 * 7],
+    ['day', 60 * 60 * 24],
+    ['hour', 60 * 60],
+    ['minute', 60],
+    ['second', 1]
+  ];
+  try {
+    var rtf = new Intl.RelativeTimeFormat(currentLang() === 'ar' ? 'ar' : 'en', { numeric: 'auto' });
+    for(var i = 0; i < units.length; i++){
+      var name = units[i][0], secInUnit = units[i][1];
+      if(Math.abs(diffSec) >= secInUnit || name === 'second'){
+        var value = Math.round(diffSec / secInUnit);
+        return rtf.format(value, name);
+      }
+    }
+  } catch(e){
+    return date.toISOString();
+  }
+}
+
+function toDatetimeLocalValue(date){
+  return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()) + 'T' +
+    pad(date.getHours()) + ':' + pad(date.getMinutes()) + ':' + pad(date.getSeconds());
+}
+
+function makeOutputRow(container, id, labelKey, defaultLabel){
+  var row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:10px;align-items:center;flex-wrap:wrap';
+
+  var label = document.createElement('span');
+  label.setAttribute('data-i18n', labelKey);
+  label.textContent = defaultLabel;
+  label.style.cssText = 'min-width:140px;color:var(--muted);font-size:13.5px';
+
+  var code = document.createElement('code');
+  code.id = id;
+  code.setAttribute('dir', 'ltr');
+  code.style.cssText = 'flex:1;min-width:200px;background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13.5px;word-break:break-all';
+
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'secondary copy-row-btn';
+  btn.setAttribute('data-target', id);
+  btn.setAttribute('data-i18n', 'ts.btn.copy');
+  btn.textContent = t('ts.btn.copy');
+
+  row.appendChild(label);
+  row.appendChild(code);
+  row.appendChild(btn);
+  container.appendChild(row);
+  return code;
+}
+
+// Build "Timestamp -> Date" output rows
+var dateRowsEl = document.getElementById('ts-date-rows');
+var outLocal = makeOutputRow(dateRowsEl, 'out-local', 'ts.out.local', 'Local time');
+var outUTC = makeOutputRow(dateRowsEl, 'out-utc', 'ts.out.utc', 'UTC time');
+var outISO = makeOutputRow(dateRowsEl, 'out-iso', 'ts.out.iso', 'ISO 8601');
+var outRelative = makeOutputRow(dateRowsEl, 'out-relative', 'ts.out.relative', 'Relative');
+
+// Build "Date -> Timestamp" output rows
+var dtRowsEl = document.getElementById('dt-rows');
+var outSeconds = makeOutputRow(dtRowsEl, 'out-seconds', 'ts.out.seconds', 'Unix seconds');
+var outMillis = makeOutputRow(dtRowsEl, 'out-millis', 'ts.out.millis', 'Unix milliseconds');
+var outISO2 = makeOutputRow(dtRowsEl, 'out-iso2', 'ts.out.iso', 'ISO 8601');
+
+document.addEventListener('click', function(ev){
+  var btn = ev.target.closest && ev.target.closest('.copy-row-btn');
+  if(!btn) return;
+  var targetId = btn.getAttribute('data-target');
+  var el = document.getElementById(targetId);
+  if(!el || !el.textContent) return;
+  navigator.clipboard.writeText(el.textContent).then(function(){
+    var original = btn.textContent;
+    btn.textContent = t('ts.btn.copied');
+    setTimeout(function(){ btn.textContent = original; }, 1200);
+  }).catch(function(){});
+});
+
+// --- Live current timestamp ---
+var liveEl = document.getElementById('ts-live');
+function tickLive(){
+  liveEl.textContent = Math.floor(Date.now() / 1000);
+}
+tickLive();
+setInterval(tickLive, 1000);
+document.getElementById('btn-copy-live').addEventListener('click', function(){
+  navigator.clipboard.writeText(liveEl.textContent).then(function(){
+    var btn = document.getElementById('btn-copy-live');
+    var original = btn.textContent;
+    btn.textContent = t('ts.btn.copied');
+    setTimeout(function(){ btn.textContent = original; }, 1200);
+  }).catch(function(){});
+});
+
+// --- Timestamp -> Date ---
+var tsInput = document.getElementById('ts-input');
+var tsUnit = document.getElementById('ts-unit');
+var tsStatus = document.getElementById('ts-date-status');
+
+function detectUnit(num){
+  return Math.abs(num) >= 1e12 ? 'ms' : 's';
+}
+
+function convertTimestampToDate(){
+  var raw = tsInput.value.trim();
+  if(raw === ''){
+    tsStatus.textContent = '';
+    outLocal.textContent = outUTC.textContent = outISO.textContent = outRelative.textContent = '';
+    return;
+  }
+  if(!/^-?\d+$/.test(raw)){
+    tsStatus.textContent = t('ts.status.invalidTimestamp');
+    tsStatus.style.color = '#e05252';
+    return;
+  }
+  var num = parseInt(raw, 10);
+  var unit = tsUnit.value;
+  if(unit === 'auto') unit = detectUnit(num);
+  var ms = unit === 'ms' ? num : num * 1000;
+  var date = new Date(ms);
+  if(isNaN(date.getTime())){
+    tsStatus.textContent = t('ts.status.invalidTimestamp');
+    tsStatus.style.color = '#e05252';
+    return;
+  }
+  outLocal.textContent = formatLocal(date);
+  outUTC.textContent = formatUTC(date);
+  outISO.textContent = date.toISOString();
+  outRelative.textContent = relativeTime(date);
+  tsStatus.style.color = 'var(--muted)';
+  tsStatus.textContent = unit === 'ms' ? t('ts.detected.millis') : t('ts.detected.seconds');
+}
+
+tsInput.addEventListener('input', convertTimestampToDate);
+tsUnit.addEventListener('change', convertTimestampToDate);
+document.getElementById('btn-use-now').addEventListener('click', function(){
+  tsInput.value = Math.floor(Date.now() / 1000);
+  tsUnit.value = 'auto';
+  convertTimestampToDate();
+});
+
+// --- Date -> Timestamp ---
+var dtInput = document.getElementById('dt-input');
+var dtStatus = document.getElementById('ts-dt-status');
+var interpretLocal = document.getElementById('interpret-local');
+var interpretUtc = document.getElementById('interpret-utc');
+
+function convertDateToTimestamp(){
+  var raw = dtInput.value;
+  if(!raw){
+    dtStatus.textContent = '';
+    outSeconds.textContent = outMillis.textContent = outISO2.textContent = '';
+    return;
+  }
+  var isoLike = raw.length === 16 ? raw + ':00' : raw; // datetime-local without seconds
+  var date = interpretUtc.checked ? new Date(isoLike + 'Z') : new Date(isoLike);
+  if(isNaN(date.getTime())){
+    dtStatus.textContent = t('ts.status.invalidDate');
+    dtStatus.style.color = '#e05252';
+    return;
+  }
+  outSeconds.textContent = Math.floor(date.getTime() / 1000);
+  outMillis.textContent = date.getTime();
+  outISO2.textContent = date.toISOString();
+  dtStatus.textContent = '';
+}
+
+dtInput.addEventListener('input', convertDateToTimestamp);
+interpretLocal.addEventListener('change', convertDateToTimestamp);
+interpretUtc.addEventListener('change', convertDateToTimestamp);
+document.getElementById('btn-use-now-date').addEventListener('click', function(){
+  interpretLocal.checked = true;
+  dtInput.value = toDatetimeLocalValue(new Date());
+  convertDateToTimestamp();
+});
+
+document.addEventListener('qth-lang-changed', function(){
+  convertTimestampToDate();
+  convertDateToTimestamp();
+});
+
+// Initial state: show a working example immediately
+tsInput.value = Math.floor(Date.now() / 1000);
+dtInput.value = toDatetimeLocalValue(new Date());
+convertTimestampToDate();
+convertDateToTimestamp();
+</script>
+</body>
+</html>
