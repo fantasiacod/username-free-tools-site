@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="color.title">Free HEX / RGB / HSL Color Converter | Code Engineer</title>
+<meta name="description" content="Convert colors between HEX, RGB and HSL instantly, or pick a color visually and get the code in all three formats. Free, runs entirely in your browser." data-i18n-content="color.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/tools/color-converter/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+<style>
+  .color-swatch{
+    width:100%;
+    height:110px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    margin-bottom:20px;
+    transition:background-color .1s ease;
+  }
+  input[type=color]{
+    width:56px;
+    height:40px;
+    padding:2px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:var(--panel-2);
+    cursor:pointer;
+  }
+  .color-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px}
+  .color-row label{min-width:220px}
+  .color-row input[type=text]{width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;dir:ltr}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../../blog/index.html" data-i18n="nav.blog">Blog</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="color.h1">HEX / RGB / HSL Color Converter</h1>
+      <p class="desc" data-i18n="color.desc">Pick a color visually or type a value into any field below — HEX, RGB and HSL all update together instantly. Everything runs in your browser; nothing is uploaded anywhere.</p>
+
+      <div id="color-swatch" class="color-swatch"></div>
+
+      <div class="color-row">
+        <label style="min-width:70px">
+          <span data-i18n="color.label.picker">Pick a color</span>
+          <input id="color-picker" type="color" value="#4f8cff">
+        </label>
+        <button id="btn-random" class="secondary" type="button" data-i18n="color.btn.random">Random color</button>
+      </div>
+
+      <div class="color-row">
+        <label>
+          <span data-i18n="color.label.hex">HEX</span>
+          <input id="hex-input" type="text" dir="ltr" placeholder="#4F8CFF">
+        </label>
+        <button class="secondary copy-field-btn" type="button" data-target="hex-input" data-i18n="color.btn.copy">Copy</button>
+      </div>
+
+      <div class="color-row">
+        <label>
+          <span data-i18n="color.label.rgb">RGB</span>
+          <input id="rgb-input" type="text" dir="ltr" placeholder="rgb(79, 140, 255)">
+        </label>
+        <button class="secondary copy-field-btn" type="button" data-target="rgb-input" data-i18n="color.btn.copy">Copy</button>
+      </div>
+
+      <div class="color-row">
+        <label>
+          <span data-i18n="color.label.hsl">HSL</span>
+          <input id="hsl-input" type="text" dir="ltr" placeholder="hsl(215, 100%, 65%)">
+        </label>
+        <button class="secondary copy-field-btn" type="button" data-target="hsl-input" data-i18n="color.btn.copy">Copy</button>
+      </div>
+
+      <p class="note" id="color-status"></p>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+
+    <section class="content">
+      <h2 data-i18n="color.h2.what">HEX, RGB and HSL — what's the difference?</h2>
+      <p data-i18n="color.p.what">All three formats describe the exact same color, just with different numbers. <strong>HEX</strong> (like <code>#4F8CFF</code>) packs red, green and blue into a six-digit base-16 code — compact and the most common format in CSS and design tools. <strong>RGB</strong> (like <code>rgb(79, 140, 255)</code>) spells out the same red, green and blue channels as plain 0-255 numbers, which is easier to read and to tweak by hand. <strong>HSL</strong> (like <code>hsl(215, 100%, 65%)</code>) describes a color by Hue (its position on a 0-360° color wheel), Saturation (how vivid vs. gray it is) and Lightness (how close to black or white it is) — it's the most intuitive format for adjusting a color, since making something lighter, darker or more muted is a single number change instead of recalculating three separate channels.</p>
+      <h2 data-i18n="color.h2.when">When you'd use a color converter</h2>
+      <p data-i18n="color.p.when">Designers and developers constantly need to translate a color between these formats: a design tool like Figma or Photoshop hands you a HEX code, but you need the RGB values for a canvas/JS project, or you want to darken a brand color slightly and HSL's Lightness value makes that trivial compared to guessing new RGB numbers. This tool keeps all three formats in sync as you type or use the native color picker, so you can grab whichever format the CSS, code, or design software you're working in actually expects.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../../assets/i18n.js"></script>
+<script>
+document.getElementById('y').textContent = new Date().getFullYear();
+
+function t(key){
+  var lang = (window.QTH_I18N && QTH_I18N.getLang()) || 'en';
+  return (window.QTH_I18N && QTH_I18N.t(key, lang)) || key;
+}
+
+function clamp255(n){ return Math.max(0, Math.min(255, Math.round(n))); }
+
+function componentToHex(c){
+  var h = clamp255(c).toString(16);
+  return h.length === 1 ? '0' + h : h;
+}
+
+function formatHex(r, g, b){
+  return ('#' + componentToHex(r) + componentToHex(g) + componentToHex(b)).toUpperCase();
+}
+
+function parseHex(str){
+  if(!str) return null;
+  var s = str.trim().replace(/^#/, '');
+  if(/^[0-9a-fA-F]{3}$/.test(s)){
+    s = s[0] + s[0] + s[1] + s[1] + s[2] + s[2];
+  }
+  if(!/^[0-9a-fA-F]{6}$/.test(s)) return null;
+  return {
+    r: parseInt(s.substring(0, 2), 16),
+    g: parseInt(s.substring(2, 4), 16),
+    b: parseInt(s.substring(4, 6), 16)
+  };
+}
+
+function formatRgb(r, g, b){
+  return 'rgb(' + clamp255(r) + ', ' + clamp255(g) + ', ' + clamp255(b) + ')';
+}
+
+function parseRgbString(str){
+  if(!str) return null;
+  var nums = str.match(/-?\d+(\.\d+)?/g);
+  if(!nums || nums.length < 3) return null;
+  var r = parseFloat(nums[0]), g = parseFloat(nums[1]), b = parseFloat(nums[2]);
+  if([r, g, b].some(function(n){ return isNaN(n) || n < 0 || n > 255; })) return null;
+  return { r: r, g: g, b: b };
+}
+
+function rgbToHsl(r, g, b){
+  r /= 255; g /= 255; b /= 255;
+  var max = Math.max(r, g, b), min = Math.min(r, g, b);
+  var h, s, l = (max + min) / 2;
+  if(max === min){
+    h = s = 0;
+  } else {
+    var d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch(max){
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      default: h = (r - g) / d + 4;
+    }
+    h /= 6;
+  }
+  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+}
+
+function hslToRgb(h, s, l){
+  h = ((h % 360) + 360) % 360;
+  s = Math.max(0, Math.min(100, s)) / 100;
+  l = Math.max(0, Math.min(100, l)) / 100;
+  if(s === 0){
+    var v = Math.round(l * 255);
+    return { r: v, g: v, b: v };
+  }
+  var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  var p = 2 * l - q;
+  function hue2rgb(p, q, t){
+    if(t < 0) t += 1;
+    if(t > 1) t -= 1;
+    if(t < 1 / 6) return p + (q - p) * 6 * t;
+    if(t < 1 / 2) return q;
+    if(t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+    return p;
+  }
+  var hk = h / 360;
+  return {
+    r: Math.round(hue2rgb(p, q, hk + 1 / 3) * 255),
+    g: Math.round(hue2rgb(p, q, hk) * 255),
+    b: Math.round(hue2rgb(p, q, hk - 1 / 3) * 255)
+  };
+}
+
+function formatHsl(h, s, l){
+  return 'hsl(' + h + ', ' + s + '%, ' + l + '%)';
+}
+
+function parseHslString(str){
+  if(!str) return null;
+  var nums = str.match(/-?\d+(\.\d+)?/g);
+  if(!nums || nums.length < 3) return null;
+  var h = parseFloat(nums[0]), s = parseFloat(nums[1]), l = parseFloat(nums[2]);
+  if(isNaN(h) || isNaN(s) || isNaN(l) || s < 0 || s > 100 || l < 0 || l > 100) return null;
+  return hslToRgb(h, s, l);
+}
+
+var swatch = document.getElementById('color-swatch');
+var colorPicker = document.getElementById('color-picker');
+var hexInput = document.getElementById('hex-input');
+var rgbInput = document.getElementById('rgb-input');
+var hslInput = document.getElementById('hsl-input');
+var statusEl = document.getElementById('color-status');
+
+function applyColor(r, g, b, skip){
+  r = clamp255(r); g = clamp255(g); b = clamp255(b);
+  var hex = formatHex(r, g, b);
+  var hsl = rgbToHsl(r, g, b);
+  if(skip !== 'picker') colorPicker.value = hex;
+  if(skip !== 'hex') hexInput.value = hex;
+  if(skip !== 'rgb') rgbInput.value = formatRgb(r, g, b);
+  if(skip !== 'hsl') hslInput.value = formatHsl(hsl.h, hsl.s, hsl.l);
+  swatch.style.backgroundColor = hex;
+  statusEl.style.color = 'var(--muted)';
+  statusEl.textContent = '';
+}
+
+function showInvalid(){
+  statusEl.style.color = '#e05252';
+  statusEl.textContent = t('color.status.invalid');
+}
+
+colorPicker.addEventListener('input', function(){
+  var rgb = parseHex(colorPicker.value);
+  if(rgb) applyColor(rgb.r, rgb.g, rgb.b, 'picker');
+});
+
+hexInput.addEventListener('input', function(){
+  var rgb = parseHex(hexInput.value);
+  if(rgb) applyColor(rgb.r, rgb.g, rgb.b, 'hex');
+  else if(hexInput.value.trim() !== '') showInvalid();
+});
+
+rgbInput.addEventListener('input', function(){
+  var rgb = parseRgbString(rgbInput.value);
+  if(rgb) applyColor(rgb.r, rgb.g, rgb.b, 'rgb');
+  else if(rgbInput.value.trim() !== '') showInvalid();
+});
+
+hslInput.addEventListener('input', function(){
+  var rgb = parseHslString(hslInput.value);
+  if(rgb) applyColor(rgb.r, rgb.g, rgb.b, 'hsl');
+  else if(hslInput.value.trim() !== '') showInvalid();
+});
+
+document.getElementById('btn-random').addEventListener('click', function(){
+  applyColor(Math.random() * 256, Math.random() * 256, Math.random() * 256);
+});
+
+document.addEventListener('click', function(ev){
+  var btn = ev.target.closest && ev.target.closest('.copy-field-btn');
+  if(!btn) return;
+  var targetId = btn.getAttribute('data-target');
+  var el = document.getElementById(targetId);
+  if(!el || !el.value) return;
+  navigator.clipboard.writeText(el.value).then(function(){
+    var original = btn.textContent;
+    btn.textContent = t('color.btn.copied');
+    setTimeout(function(){ btn.textContent = original; }, 1200);
+  }).catch(function(){});
+});
+
+// Initial state: a working example immediately (site's own accent color)
+applyColor(79, 140, 255);
+</script>
+</body>
+</html>

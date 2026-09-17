@@ -30,6 +30,7 @@ a daily scheduled task (see `PROGRESS.md` for the log of what's already been don
 - [x] 9th tool: Base64 Encoder & Decoder (`tools/base64-converter/`) — requested directly by the site owner in chat on 2026-09-10 (out of the normal roadmap queue), built the same day. Text encode/decode plus a file-to-Base64 (data URI) converter. See PROGRESS.md.
 - [x] 10th tool: UUID/GUID Generator (`tools/uuid-generator/index.html`) — done 2026-09-14, see PROGRESS.md.
 - [x] More small developer-utility tools in the same vein as Base64/JSON/Unit converter: added a Unix timestamp ↔ human-date converter. Done 2026-09-16 — see PROGRESS.md. A HEX/RGB/HSL color converter remains a good candidate for the next "new tool" increment.
+- [x] 13th tool: HEX/RGB/HSL Color Converter (`tools/color-converter/index.html`) — done 2026-09-17, see PROGRESS.md.
 - [ ] Add basic client-side usage counters or lightweight analytics if a free privacy-respecting option is available without any account signup (skip if it requires an account — flag as NEEDS HUMAN instead).
 - [ ] Periodically re-check that all pages still load correctly (no console errors) after changes — treat this as part of every session, not a separate roadmap item.
 
@@ -65,3 +66,4 @@ a daily scheduled task (see `PROGRESS.md` for the log of what's already been don
 - [x] Added 10th tool: UUID/GUID Generator (`tools/uuid-generator/`) — quantity input (1-1000), uppercase/no-hyphens/braces formatting options, `crypto.randomUUID()` with a Web Crypto fallback, copy-all and clear buttons. Live, bilingual, linked from homepage and sitemap. See PROGRESS.md 2026-09-14.
 - [x] Added 11th tool: Text Highlighter & Marker (`tools/text-highlighter/`) — requested directly by the site owner in chat on 2026-09-14 (Arabic: "add symbols/marks to text, select it, etc."), built the same day. A contentEditable box where you select any part of your text and highlight it in 5 colors or make it bold/underlined/struck-through, then copy either as rich formatted text or as plain text with markdown-style markers. See PROGRESS.md.
 - [x] Added 12th tool: Unix Timestamp Converter (`tools/timestamp-converter/`) — done 2026-09-16, see PROGRESS.md.
+- [x] Added 13th tool: HEX/RGB/HSL Color Converter (`tools/color-converter/`) — a native color picker plus three linked HEX/RGB/HSL text fields that stay in sync in both directions as you type, a random-color button, and a copy button per field. Done 2026-09-17, see PROGRESS.md.
