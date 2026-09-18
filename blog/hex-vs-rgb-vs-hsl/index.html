@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="blogpost6.title">HEX vs RGB vs HSL: What's the Difference (and When to Use Each)? | Code Engineer</title>
+<meta name="description" content="HEX, RGB and HSL all describe the exact same colors — they're just different ways of writing them down. A plain-English guide to what each one means and when to reach for it, plus a free converter." data-i18n-content="blogpost6.meta">
+<link rel="canonical" href="https://fantasiacode.github.io/username-free-tools-site/blog/hex-vs-rgb-vs-hsl/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../index.html" data-i18n="nav.blog">Blog</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="blogpost6.h1">HEX vs RGB vs HSL: What's the Difference (and When to Use Each)?</h1>
+      <p class="note" data-i18n="blogpost6.date">September 18, 2026</p>
+
+      <div class="content">
+        <p data-i18n="blogpost6.p.intro">Open any design tool or CSS file and you'll bump into a color written three different ways: something like #1E90FF, or rgb(30, 144, 255), or hsl(210, 100%, 56%). These aren't three different colors or three competing standards — they're the exact same shade of blue, just written down using three different systems. Knowing what each one actually encodes makes it much easier to tweak a color on purpose instead of guessing and checking.</p>
+
+        <h2 data-i18n="blogpost6.h2.hex">HEX: a compact code built for copy-pasting</h2>
+        <p data-i18n="blogpost6.p.hex">A HEX code like #1E90FF packs three numbers — how much red, green and blue light to mix — into six hexadecimal digits, two per channel, each running from 00 (none) to FF (full intensity). It's compact, it's a single unbroken string with no spaces or commas, and it's the format you'll see most often in design tools, brand style guides and quick copy-paste jobs. The tradeoff is that it's not very human-readable: there's no way to glance at #1E90FF and know it's a fairly bright, saturated blue without doing the mental math or just looking it up.</p>
+
+        <h2 data-i18n="blogpost6.h2.rgb">RGB: the same three numbers, spelled out in base 10</h2>
+        <p data-i18n="blogpost6.p.rgb">rgb(30, 144, 255) describes the identical color as the HEX code above, just with each channel written as an ordinary 0-255 number instead of a two-digit hex pair. It's easier to read at a glance if you're used to thinking in that 0-255 range, and it's the format most image-editing tools and color pickers show you by default. RGB (and HEX) both describe color by mixing light — the same way a screen's pixels actually work — which is exactly why they're the two most common formats in web and app design.</p>
+
+        <h2 data-i18n="blogpost6.h2.hsl">HSL: the format built for adjusting a color, not just naming it</h2>
+        <p data-i18n="blogpost6.p.hsl">hsl(210, 100%, 56%) throws out the red/green/blue mental model entirely and describes a color the way a person actually thinks about one: Hue (the base color itself, as an angle from 0-360 around a color wheel — 0 is red, 120 is green, 240 is blue), Saturation (how vivid vs. gray the color is, 0-100%) and Lightness (how close to black or white it is, 0-100%). This is the format to reach for when you want to *change* a color rather than just record it: need a slightly darker version of the same blue? Lower the Lightness number and leave Hue and Saturation alone. Need the same brightness in a different color? Change only the Hue. Doing either of those in HEX or RGB means recalculating all three channels from scratch.</p>
+
+        <h2 data-i18n="blogpost6.h2.same">They're the same color — conversion is just arithmetic</h2>
+        <p data-i18n="blogpost6.p.same">Because all three formats describe the same underlying color space, converting between them doesn't lose any information or change the color at all — it's a pure, reversible math conversion (HEX splits into RGB directly since it's just RGB in another base; RGB-to-HSL runs the values through a standard formula and back). That means you can safely design in whichever format is most convenient at each step — pick visually, tweak lightness in HSL, then hand the final HEX code to a developer — without ever worrying about the color drifting.</p>
+
+        <h2 data-i18n="blogpost6.h2.pick">Quick decision guide</h2>
+        <ul>
+          <li data-i18n="blogpost6.pick.1">Pasting a brand color into code, a design tool, or a style guide? Use HEX — it's the most universally recognized, compact format.</li>
+          <li data-i18n="blogpost6.pick.2">Reading values off a color picker or working with an image-editing tool's default output? RGB is usually what you'll see and it's fine to use as-is.</li>
+          <li data-i18n="blogpost6.pick.3">Need a lighter, darker, more muted, or more vivid version of a color you already have? Convert to HSL, adjust just the Lightness or Saturation number, then convert back.</li>
+          <li data-i18n="blogpost6.pick.4">Not sure which one a tool or teammate needs? Keep all three handy — since they're just different views of the same color, there's no wrong choice, only the one that's more convenient for that step.</li>
+        </ul>
+
+        <p data-i18n="blogpost6.p.cta">You don't need to do the math by hand — pick a color visually or paste in any HEX, RGB or HSL value, and get it converted to the other two formats instantly, right in your browser.</p>
+        <p><a href="../../tools/color-converter/index.html" data-i18n="blogpost6.cta.link">Try the free HEX / RGB / HSL Color Converter →</a></p>
+      </div>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+<script src="../../assets/i18n.js"></script>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
