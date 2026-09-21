@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="blogpost8.title">How to Convert a Unix Timestamp to a Readable Date | Code Engineer</title>
+<meta name="description" content="Unix timestamps show up in logs, APIs and databases as a plain number, not a date. A plain-English guide to what that number actually means, why it's in seconds or milliseconds, timezones, the Year 2038 problem, and a free converter." data-i18n-content="blogpost8.meta">
+<link rel="canonical" href="https://fantasiacode.github.io/username-free-tools-site/blog/unix-timestamp-to-readable-date/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../index.html" data-i18n="nav.blog">Blog</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="blogpost8.h1">How to Convert a Unix Timestamp to a Readable Date</h1>
+      <p class="note" data-i18n="blogpost8.date">September 21, 2026</p>
+
+      <div class="content">
+        <p data-i18n="blogpost8.p.intro">You open a server log, an API response, or a database row and instead of a date you get a number like `1758000000`. That's a Unix timestamp — and once you know how to read it, it's actually one of the simplest date formats there is. Here's what that number means, why it sometimes has three extra digits, how timezones fit in, and the one edge case worth knowing about before you trust a timestamp far in the future.</p>
+
+        <h2 data-i18n="blogpost8.h2.what">What a Unix timestamp actually is</h2>
+        <p data-i18n="blogpost8.p.what">A Unix timestamp (also called Unix time, epoch time, or POSIX time) is simply the number of seconds that have passed since a fixed starting point: midnight UTC on January 1, 1970 — the "Unix epoch." `1758000000` means "1,758,000,000 seconds after that moment," which works out to September 16, 2025. There's no month, day, or timezone baked into the number itself — it's a single, ever-increasing count that any system, in any timezone, can convert into the same exact instant. That's the whole appeal: computers are much better at comparing and storing one plain integer than parsing a hundred different date-string formats.</p>
+
+        <h2 data-i18n="blogpost8.h2.ms">Seconds vs. milliseconds — the most common mix-up</h2>
+        <p data-i18n="blogpost8.p.ms">The classic Unix timestamp is in seconds, which is what you'll get from most Unix/Linux tools, PHP's `time()`, and many backend APIs. But JavaScript's `Date.now()` and a lot of web-facing APIs return milliseconds instead — the same idea, just 1,000x more precise. The quick way to tell which one you're looking at: a current seconds-based timestamp is 10 digits long (like `1758000000`), while a current milliseconds-based one is 13 digits (like `1758000000000`). Feeding a milliseconds value into a function that expects seconds lands you somewhere in the year 55,700 — and feeding a seconds value into a function expecting milliseconds lands you back in 1970 — both instantly obvious once you know what to check for.</p>
+
+        <h2 data-i18n="blogpost8.h2.tz">Timezones: the timestamp itself doesn't have one</h2>
+        <p data-i18n="blogpost8.p.tz">Because a Unix timestamp counts seconds since a single global instant, it's inherently timezone-free — `1758000000` refers to the exact same moment everywhere on Earth. What changes by timezone is only how that moment gets *displayed*: converted to UTC it might read "16:00," while converted to your local timezone it might read "09:00" or "19:00," depending on where you are. This is actually the main reason developers like storing timestamps this way — the raw number never needs adjusting when a user changes location or daylight saving time shifts; only the final display step needs to know which timezone to render it in.</p>
+
+        <h2 data-i18n="blogpost8.h2.2038">The Year 2038 problem, briefly</h2>
+        <p data-i18n="blogpost8.p.2038">Older systems store a Unix timestamp as a signed 32-bit integer, which can only count up to 2,147,483,647 seconds after the epoch — a limit reached at 03:14:07 UTC on January 19, 2038. After that instant, a 32-bit signed timestamp overflows and wraps around to a negative number, which typically gets misread as a date back in December 1901. Most modern systems, languages, and databases have already moved to 64-bit timestamps (which won't run out for billions of years), so this mostly matters for older embedded systems and legacy 32-bit software — but it's worth knowing about if you're ever debugging a date that mysteriously jumped to 1901.</p>
+
+        <h2 data-i18n="blogpost8.h2.pick">Quick reference</h2>
+        <ul>
+          <li data-i18n="blogpost8.pick.1">10-digit number (like `1758000000`)? That's seconds — the classic Unix timestamp format.</li>
+          <li data-i18n="blogpost8.pick.2">13-digit number (like `1758000000000`)? That's milliseconds — common in JavaScript and many web APIs.</li>
+          <li data-i18n="blogpost8.pick.3">Need to go the other way — a date into a timestamp — for an API request or a database query? Pick a date and time and read off both the seconds and milliseconds versions at once.</li>
+          <li data-i18n="blogpost8.pick.4">Debugging a date that looks wildly wrong (either 1901 or far in the future)? Check for a seconds/milliseconds mix-up first, then a possible 32-bit overflow if the date involved is near or after 2038.</li>
+        </ul>
+
+        <p data-i18n="blogpost8.p.cta">No need to do the math by hand — paste any timestamp (seconds or milliseconds, auto-detected) to get the local time, UTC time, ISO 8601 format and a plain-language relative time, or go the other way from a date picker to Unix seconds and milliseconds, right in your browser.</p>
+        <p><a href="../../tools/timestamp-converter/index.html" data-i18n="blogpost8.cta.link">Try the free Unix Timestamp Converter →</a></p>
+      </div>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+<script src="../../assets/i18n.js"></script>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
