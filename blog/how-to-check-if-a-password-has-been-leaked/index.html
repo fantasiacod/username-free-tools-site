@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-i18n="blogpost10.title">How to Check If a Password Has Been Leaked (and What Makes One Actually Strong) | Code Engineer</title>
+<meta name="description" content="Length alone doesn't make a password strong, and reused passwords can be compromised without you knowing. How to check for leaks safely, and what actually matters." data-i18n-content="blogpost10.meta">
+<link rel="canonical" href="https://fantasiacod.github.io/username-free-tools-site/blog/how-to-check-if-a-password-has-been-leaked/index.html">
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="icon" type="image/x-icon" href="../../favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../favicon-180.png">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><a href="../../index.html" style="color:inherit;display:flex;align-items:center;gap:8px"><img src="../../assets/logo-icon.png" alt="Code Engineer logo" width="28" height="28" style="border-radius:50%;display:block"><span data-i18n="brand.name">Code Engineer</span></a></div>
+    <nav class="site">
+      <a href="../../index.html" data-i18n="nav.tools">Tools</a>
+      <a href="../index.html" data-i18n="nav.blog">Blog</a>
+      <a href="../../about.html" data-i18n="nav.about">About</a>
+      <a href="../../contact.html" data-i18n="nav.contact">Contact</a>
+      <button id="lang-toggle" type="button">العربية</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="tool-panel">
+      <h1 data-i18n="blogpost10.h1">How to Check If a Password Has Been Leaked (and What Makes One Actually Strong)</h1>
+      <p class="note" data-i18n="blogpost10.date">September 23, 2026</p>
+
+      <div class="content">
+        <p data-i18n="blogpost10.p.intro">A password can look strong — long, random-looking, full of symbols — and still be worthless if it already sits in a stolen-data file being traded online. Length and character variety only protect you from someone guessing; they do nothing once a password has actually leaked in a breach. Here's what genuinely makes a password strong, how leaks happen in the first place, and a safe way to check if one of yours has already been exposed.</p>
+
+        <h2 data-i18n="blogpost10.h2.strong">What makes a password strong (beyond length)</h2>
+        <p data-i18n="blogpost10.p.strong">Length matters, but it's not the whole story. A strong password is unpredictable: truly random, not built from a pattern a computer can guess its way toward. Swapping letters for look-alike symbols ("P@ssw0rd!") barely helps — password-cracking tools have had these substitutions built in for years, so "P@ssw0rd!" is cracked about as fast as "Password". Real strength comes from randomness across a large character set (uppercase, lowercase, numbers and symbols together, not just one), and — just as important — uniqueness. A brilliant, random 20-character password is still a liability if you use the exact same one on ten different sites, because it only takes one of those ten getting breached to put the other nine at risk too.</p>
+
+        <h2 data-i18n="blogpost10.h2.leak">How a password actually "leaks"</h2>
+        <p data-i18n="blogpost10.p.leak">A leak almost never means someone guessed your password. It usually means a company you had an account with got hacked, and its entire user database — including passwords, sometimes stored badly (unhashed, or hashed with weak, outdated algorithms) — ended up copied and circulated. Once that data is out, attackers don't need to crack anything: they run "credential stuffing" attacks, automatically trying the same leaked email-and-password pairs against banks, email providers and social media, betting that people reuse passwords. That bet pays off constantly, which is exactly why password reuse — not weak individual passwords — is the single biggest risk most people carry.</p>
+
+        <h2 data-i18n="blogpost10.h2.check">How to check if a password has been leaked, safely</h2>
+        <p data-i18n="blogpost10.p.check">The well-known, privacy-respecting way to do this is the "Pwned Passwords" database run by Have I Been Pwned (haveibeenpwned.com), built from hundreds of millions of real passwords found in known breaches. The clever part is how it protects you while checking: your browser never sends the actual password. It hashes the password locally (SHA-1), sends only the first 5 characters of that hash to the API, and gets back every hash suffix in the world starting with those 5 characters — then checks locally whether your full hash is among them. This is called k-anonymity, and it means the service (or anyone watching the network request) never learns your actual password, only that a hash prefix was queried. If a password comes back as "seen" — even once — treat it as burned and stop using it anywhere, regardless of how long or complex it looks.</p>
+
+        <h2 data-i18n="blogpost10.h2.after">If a password has been leaked, do this</h2>
+        <p data-i18n="blogpost10.p.after">Change it immediately on the site it leaked from, and — this is the part people skip — on every other site where you used the same password or a close variant, since attackers try those combinations first. Turn on two-factor authentication (2FA) wherever it's offered, so a leaked password alone isn't enough to get in. And going forward, use a password manager: it generates a unique random password for every single site and remembers them for you, so reuse stops being a temptation at all. Generating a fresh, unique password for each account you change today is a good place to start.</p>
+
+        <h2 data-i18n="blogpost10.h2.pick">Quick reference</h2>
+        <ul>
+          <li data-i18n="blogpost10.pick.1">Length helps against guessing, but reuse is what actually gets accounts broken into via credential stuffing.</li>
+          <li data-i18n="blogpost10.pick.2">Leetspeak substitutions (@ for a, 0 for o) barely slow down modern cracking tools — true randomness is what matters.</li>
+          <li data-i18n="blogpost10.pick.3">"Pwned Passwords" checks use k-anonymity: only a hash prefix is sent, never your actual password.</li>
+          <li data-i18n="blogpost10.pick.4">If a password shows up as leaked anywhere, change it everywhere you reused it, not just on the one site.</li>
+        </ul>
+
+        <p data-i18n="blogpost10.p.cta">Need a fresh, unique password for an account you're changing today? Generate one instantly with a length slider and full character-set control — nothing typed or generated here ever leaves your browser.</p>
+        <p><a href="../../tools/password-generator/index.html" data-i18n="blogpost10.cta.link">Try the free Password Generator →</a></p>
+      </div>
+    </div>
+
+    <div class="ad-slot" data-i18n="ad.slot">Ad space (reserved)</div>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div>© <span id="y"></span> <span data-i18n="brand.name">Code Engineer</span></div>
+    <div>
+      <a href="../../privacy-policy.html" data-i18n="footer.privacy">Privacy Policy</a> ·
+      <a href="../../terms.html" data-i18n="footer.terms">Terms</a>
+    </div>
+  </div>
+</footer>
+<script src="../../assets/i18n.js"></script>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+</body>
+</html>
