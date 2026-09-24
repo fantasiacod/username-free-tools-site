@@ -65,8 +65,78 @@
       </div>
 
       <div class="tool-panel" style="margin-top:20px">
-        <h2 style="margin-top:0;font-size:19px">Coming next to this panel</h2>
-        <p class="desc" style="margin-bottom:0">Adding blog posts, changing the accent color, and uploading a new logo are planned as the next additions here — each will get the same careful, tested treatment as this visibility control. For now those still go through chat, same as always.</p>
+        <h2 style="margin-top:0;font-size:19px">Add a Blog Post</h2>
+        <p class="desc">Publishes a new, fully bilingual post straight to the live site: creates its page, lists it on the blog index, swaps it into the homepage's "From the blog" strip, and adds it to the sitemap. Each post carries its own English and Arabic text — it does not touch the site's shared translation file.</p>
+
+        <div class="controls">
+          <label style="min-width:280px"><span>Title (English)</span><input id="bp-title-en" type="text" placeholder="e.g. How to Resize an Image Without Losing Quality"></label>
+          <label style="min-width:280px"><span>Title (Arabic)</span><input id="bp-title-ar" type="text" dir="rtl" placeholder="مثال: كيف تغيّر حجم صورة بدون فقدان الجودة"></label>
+        </div>
+        <div class="controls">
+          <label style="min-width:280px"><span>Meta description (English)</span><input id="bp-desc-en" type="text" placeholder="One sentence for search results and the card preview"></label>
+          <label style="min-width:280px"><span>Meta description (Arabic)</span><input id="bp-desc-ar" type="text" dir="rtl"></label>
+        </div>
+        <div class="controls">
+          <label style="width:90px"><span>Icon (emoji)</span><input id="bp-icon" type="text" value="📝" maxlength="4"></label>
+          <label style="width:170px"><span>Publish date</span><input id="bp-date" type="date"></label>
+          <label style="min-width:220px"><span>Related tool (optional)</span><input id="bp-tool-slug" type="text" placeholder="e.g. password-generator"></label>
+        </div>
+        <div class="controls" style="flex-direction:column;align-items:stretch">
+          <label>
+            <span>Body (English) — blank line = new paragraph, "## " = heading, "- " lines = bullet list</span>
+            <textarea id="bp-body-en" rows="8" style="width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px;font-size:14px;font-family:inherit"></textarea>
+          </label>
+        </div>
+        <div class="controls" style="flex-direction:column;align-items:stretch">
+          <label>
+            <span>Body (Arabic) — نفس القاعدة: سطر فاضي = فقرة جديدة، "## " = عنوان، أسطر تبدأ بـ"- " = قائمة نقطية</span>
+            <textarea id="bp-body-ar" rows="8" dir="rtl" style="width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px;font-size:14px;font-family:inherit"></textarea>
+          </label>
+        </div>
+        <div class="controls">
+          <label style="min-width:220px"><span>CTA blurb (English, optional)</span><input id="bp-cta-text-en" type="text"></label>
+          <label style="min-width:220px"><span>CTA blurb (Arabic, optional)</span><input id="bp-cta-text-ar" type="text" dir="rtl"></label>
+        </div>
+        <div class="controls">
+          <label style="min-width:220px"><span>CTA link text (English)</span><input id="bp-cta-link-en" type="text" placeholder="e.g. Try the free tool →"></label>
+          <label style="min-width:220px"><span>CTA link text (Arabic)</span><input id="bp-cta-link-ar" type="text" dir="rtl"></label>
+        </div>
+        <div class="controls">
+          <button type="button" id="btn-publish-post">Publish Post</button>
+        </div>
+        <p id="bp-result" class="note"></p>
+      </div>
+
+      <div class="tool-panel" style="margin-top:20px">
+        <h2 style="margin-top:0;font-size:19px">Accent Color</h2>
+        <p class="desc">Changes the site's main accent color (buttons, links, badges). Takes effect on every page once Vercel redeploys.</p>
+        <div id="theme-loading" class="note">Loading current color…</div>
+        <div class="controls" id="theme-controls" style="display:none">
+          <label style="width:70px"><span>Color</span><input id="theme-color-picker" type="color" style="width:100%;height:38px;padding:2px;background:var(--panel-2);border:1px solid var(--border);border-radius:8px;cursor:pointer"></label>
+          <label style="width:120px"><span>Hex</span><input id="theme-color-hex" type="text" maxlength="7" placeholder="#4f8cff"></label>
+          <button type="button" id="btn-save-color">Save Color</button>
+        </div>
+        <p id="theme-result" class="note"></p>
+      </div>
+
+      <div class="tool-panel" style="margin-top:20px">
+        <h2 style="margin-top:0;font-size:19px">Logo</h2>
+        <p class="desc">Uploads a new header/favicon-source logo. Any image format is converted to PNG in your browser before uploading — nothing but the final PNG is sent. Note: this replaces <code>assets/logo-icon.png</code> only; the four favicon files still need regenerating separately if you want them to match.</p>
+        <div class="controls">
+          <div>
+            <div class="sub" style="font-size:12.5px;color:var(--muted);margin-bottom:6px">Current</div>
+            <img src="../assets/logo-icon.png" alt="Current logo" width="56" height="56" style="border-radius:50%;display:block;border:1px solid var(--border)">
+          </div>
+          <div>
+            <div class="sub" style="font-size:12.5px;color:var(--muted);margin-bottom:6px">New (preview)</div>
+            <img id="logo-preview" alt="New logo preview" width="56" height="56" style="border-radius:50%;display:none;border:1px solid var(--border);background:#000">
+          </div>
+        </div>
+        <div class="controls">
+          <input id="logo-file" type="file" accept="image/*">
+          <button type="button" id="btn-upload-logo" disabled>Upload Logo</button>
+        </div>
+        <p id="logo-result" class="note"></p>
       </div>
     </div>
 
@@ -120,6 +190,7 @@ async function showDashboard() {
   dashboardView.style.display = 'block';
   renderLogoutButton();
   await loadCards();
+  await loadAccentColor();
 }
 
 document.getElementById('btn-login').addEventListener('click', async () => {
@@ -265,6 +336,218 @@ async function toggleCard(listing, id, hidden, btn, row, pill) {
     btn.disabled = false;
   }
 }
+
+// ---------- Add a Blog Post ----------
+
+document.getElementById('bp-date').value = new Date().toISOString().slice(0, 10);
+
+document.getElementById('btn-publish-post').addEventListener('click', async () => {
+  const val = (id) => document.getElementById(id).value.trim();
+  const resultEl = document.getElementById('bp-result');
+  resultEl.style.color = '';
+  resultEl.textContent = '';
+
+  const payload = {
+    titleEn: val('bp-title-en'),
+    titleAr: val('bp-title-ar'),
+    descEn: val('bp-desc-en'),
+    descAr: val('bp-desc-ar'),
+    icon: val('bp-icon'),
+    date: val('bp-date'),
+    toolSlug: val('bp-tool-slug'),
+    bodyEn: document.getElementById('bp-body-en').value,
+    bodyAr: document.getElementById('bp-body-ar').value,
+    ctaTextEn: val('bp-cta-text-en'),
+    ctaTextAr: val('bp-cta-text-ar'),
+    ctaLinkTextEn: val('bp-cta-link-en'),
+    ctaLinkTextAr: val('bp-cta-link-ar'),
+  };
+
+  const required = ['titleEn', 'titleAr', 'descEn', 'descAr', 'bodyEn', 'bodyAr', 'date'];
+  const missing = required.filter((k) => !String(payload[k] || '').trim());
+  if (missing.length) {
+    resultEl.style.color = '#f87171';
+    resultEl.textContent = 'Fill in every English/Arabic field and a date before publishing.';
+    return;
+  }
+
+  const btn = document.getElementById('btn-publish-post');
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = 'Publishing…';
+
+  try {
+    const res = await fetch('/api/admin/blog-post', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.status === 401) { await showLogin(); return; }
+    if (!res.ok || !data.ok) {
+      const errorLabels = {
+        slug_exists: 'A post with a very similar title already exists (' + (data.slug || '') + ').',
+        invalid_title: 'That title could not be turned into a URL — try a simpler title.',
+        invalid_date: 'That publish date looks invalid.',
+        tool_not_found: 'No tool found at that slug — check it against the URL under /tools/.',
+        invalid_tool_slug: 'Related tool slug can only contain lowercase letters, numbers and hyphens.',
+      };
+      throw new Error(errorLabels[data.error] || data.message || data.error || 'publish_failed');
+    }
+
+    resultEl.style.color = 'var(--accent-2)';
+    resultEl.textContent = 'Published: ' + data.url + (data.warnings && data.warnings.length ? ' — but with warnings: ' + data.warnings.join(' ') : '');
+    // Clear the form for the next post, but leave the date as-is.
+    ['bp-title-en', 'bp-title-ar', 'bp-desc-en', 'bp-desc-ar', 'bp-tool-slug', 'bp-cta-text-en', 'bp-cta-text-ar', 'bp-cta-link-en', 'bp-cta-link-ar'].forEach((id) => { document.getElementById(id).value = ''; });
+    document.getElementById('bp-body-en').value = '';
+    document.getElementById('bp-body-ar').value = '';
+    document.getElementById('bp-icon').value = '📝';
+    await loadCards();
+  } catch (e) {
+    resultEl.style.color = '#f87171';
+    resultEl.textContent = 'Could not publish: ' + e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+});
+
+// ---------- Accent Color ----------
+
+async function loadAccentColor() {
+  const loadingEl = document.getElementById('theme-loading');
+  const controlsEl = document.getElementById('theme-controls');
+  try {
+    const res = await fetch('/api/admin/theme-color');
+    if (res.status === 401) { await showLogin(); return; }
+    const data = await res.json();
+    if (!res.ok || !data.ok || !data.color) throw new Error((data && data.message) || 'load_failed');
+    document.getElementById('theme-color-picker').value = data.color;
+    document.getElementById('theme-color-hex').value = data.color;
+    loadingEl.style.display = 'none';
+    controlsEl.style.display = 'flex';
+  } catch (e) {
+    loadingEl.textContent = 'Could not load the current accent color: ' + e.message;
+  }
+}
+
+document.getElementById('theme-color-picker').addEventListener('input', (e) => {
+  document.getElementById('theme-color-hex').value = e.target.value;
+});
+document.getElementById('theme-color-hex').addEventListener('input', (e) => {
+  if (/^#[0-9a-fA-F]{6}$/.test(e.target.value)) {
+    document.getElementById('theme-color-picker').value = e.target.value;
+  }
+});
+
+document.getElementById('btn-save-color').addEventListener('click', async () => {
+  const resultEl = document.getElementById('theme-result');
+  const hex = document.getElementById('theme-color-hex').value.trim();
+  resultEl.style.color = '';
+  if (!/^#[0-9a-fA-F]{6}$/.test(hex)) {
+    resultEl.style.color = '#f87171';
+    resultEl.textContent = 'Enter a valid 6-digit hex color, like #4f8cff.';
+    return;
+  }
+  const btn = document.getElementById('btn-save-color');
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/admin/theme-color', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ color: hex }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.status === 401) { await showLogin(); return; }
+    if (!res.ok || !data.ok) throw new Error(data.message || data.error || 'save_failed');
+    resultEl.style.color = 'var(--accent-2)';
+    resultEl.textContent = 'Saved — live within about a minute once Vercel redeploys.';
+  } catch (e) {
+    resultEl.style.color = '#f87171';
+    resultEl.textContent = 'Could not save: ' + e.message;
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+// ---------- Logo Upload ----------
+
+let logoPngDataUrl = null;
+
+document.getElementById('logo-file').addEventListener('change', (e) => {
+  const file = e.target.files && e.target.files[0];
+  const resultEl = document.getElementById('logo-result');
+  const previewEl = document.getElementById('logo-preview');
+  const uploadBtn = document.getElementById('btn-upload-logo');
+  resultEl.textContent = '';
+  logoPngDataUrl = null;
+  uploadBtn.disabled = true;
+  previewEl.style.display = 'none';
+  if (!file) return;
+
+  if (!file.type.startsWith('image/')) {
+    resultEl.style.color = '#f87171';
+    resultEl.textContent = 'Please choose an image file.';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const size = 512;
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      // Fit the image inside a square canvas, preserving aspect ratio, on a
+      // transparent background — the browser does the format conversion, so
+      // the server only ever sees a plain PNG.
+      const scale = Math.min(size / img.width, size / img.height);
+      const w = img.width * scale;
+      const h = img.height * scale;
+      ctx.clearRect(0, 0, size, size);
+      ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+      logoPngDataUrl = canvas.toDataURL('image/png');
+      previewEl.src = logoPngDataUrl;
+      previewEl.style.display = 'block';
+      uploadBtn.disabled = false;
+    };
+    img.onerror = () => {
+      resultEl.style.color = '#f87171';
+      resultEl.textContent = 'Could not read that image file.';
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('btn-upload-logo').addEventListener('click', async () => {
+  const resultEl = document.getElementById('logo-result');
+  if (!logoPngDataUrl) return;
+  const btn = document.getElementById('btn-upload-logo');
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = 'Uploading…';
+  try {
+    const res = await fetch('/api/admin/logo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageBase64: logoPngDataUrl }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.status === 401) { await showLogin(); return; }
+    if (!res.ok || !data.ok) throw new Error(data.message || data.error || 'upload_failed');
+    resultEl.style.color = 'var(--accent-2)';
+    resultEl.textContent = 'Logo updated — live within about a minute. Remember the 4 favicon files are separate and still need regenerating if you want them to match.';
+  } catch (e) {
+    resultEl.style.color = '#f87171';
+    resultEl.textContent = 'Could not upload: ' + e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+});
 
 (async function init() {
   const authed = await checkSession();

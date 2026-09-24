@@ -1409,6 +1409,31 @@
       if(dict[key] !== undefined) el.setAttribute('placeholder', dict[key]);
     });
 
+    // Generic bilingual visibility toggle for self-contained content that
+    // doesn't go through the shared translation dictionary above (e.g.
+    // admin-panel-created blog posts, which carry their own inline EN/AR
+    // blocks rather than mutating this shared file). Any element with
+    // data-lang="en" or data-lang="ar" is shown only when it matches the
+    // active language; everything else about the element is untouched.
+    document.querySelectorAll('[data-lang]').forEach(function(el){
+      el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+    });
+
+    // Companion mechanism for short, self-contained bilingual strings (page
+    // <title>, <meta description>, headings, card titles/dates) where the
+    // EN/AR text lives right on the element itself instead of a duplicated
+    // block: data-lang-en="..." + data-lang-ar="..." swap into the element's
+    // text (or `content`/`placeholder` where applicable) — no dictionary
+    // lookup, so it works the same for any self-contained page.
+    document.querySelectorAll('[data-lang-en]').forEach(function(el){
+      const val = el.getAttribute(lang === 'ar' ? 'data-lang-ar' : 'data-lang-en');
+      if(val === null) return;
+      const tag = el.tagName;
+      if(tag === 'META') el.setAttribute('content', val);
+      else if(tag === 'INPUT' || tag === 'TEXTAREA') el.setAttribute('placeholder', val);
+      else el.textContent = val;
+    });
+
     const btn = document.getElementById('lang-toggle');
     if(btn) btn.textContent = lang === 'ar' ? 'English' : 'العربية';
 

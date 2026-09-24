@@ -5,10 +5,12 @@ functions on Vercel — not a fake client-side login. It only works once you're
 hosted on Vercel (or another platform with serverless/Node function support);
 GitHub Pages alone can't run it.
 
-The panel currently does one thing end-to-end, fully tested: **show/hide any
-tool or blog post** from the homepage and blog listings, without deleting the
-page. More capabilities (adding blog posts, changing the accent color,
-uploading a new logo) are planned next, built with the same care.
+The panel does four things end-to-end, fully tested:
+
+1. **Show/hide any tool or blog post** from the homepage and blog listings, without deleting the page.
+2. **Publish a new, fully bilingual blog post** — creates its page, lists it on the blog index, swaps it into the homepage's "From the blog" strip, and adds it to the sitemap.
+3. **Change the site's accent color** (buttons, links, badges).
+4. **Upload a new logo** (`assets/logo-icon.png`) — any image format, converted to PNG in your browser before upload.
 
 ## 1. Set three environment variables in Vercel
 
@@ -39,10 +41,27 @@ hash for the new password, and update the environment variable in Vercel.
 
 Once the environment variables are set and the site has redeployed, open
 `/admin/index.html` (also unlinked — bookmark it) and log in with the
-password you chose. You'll see every tool and blog post with a Show/Hide
-toggle. Hiding something removes its card from the homepage/blog grid; the
-page itself still exists and is reachable by direct link (it isn't removed
-from the sitemap yet — that's a known limitation for this first version).
+password you chose.
+
+- **Show/Hide**: every tool and blog post gets a toggle. Hiding something
+  removes its card from the homepage/blog grid; the page itself still exists
+  and is reachable by direct link (it isn't removed from the sitemap yet —
+  a known limitation, tracked in ROADMAP.md as a small follow-up).
+- **Add a Blog Post**: fill in an English and an Arabic title, meta
+  description and body for each language (body text supports blank-line
+  paragraphs, `## ` for a heading, and `- ` lines for a bullet list — plain
+  text only, safely escaped either way), optionally point it at an existing
+  tool for the closing call-to-action, and click Publish. The post goes
+  live, gets listed on the blog index, becomes one of the two posts shown in
+  the homepage's "From the blog" strip, and is added to the sitemap — all in
+  one commit sequence.
+- **Accent Color**: pick a color (or type a hex code) and save. Updates
+  `assets/style.css`'s `--accent` value only — nothing else in the file.
+- **Logo**: choose any image file; your browser converts it to PNG before
+  upload, so the server only ever receives a plain PNG. This replaces
+  `assets/logo-icon.png` only — the 4 favicon files (`favicon.ico`,
+  `favicon-32.png`, `favicon-180.png`, `favicon-512.png`) are separate and
+  still need regenerating by hand if you want them to match.
 
 ## How it works, briefly
 
@@ -52,9 +71,19 @@ from the sitemap yet — that's a known limitation for this first version).
   for 12 hours.
 - Every admin API call re-checks that cookie's signature server-side — the
   panel's UI is just a convenience, not where the real security lives.
-- Show/Hide commits directly to this GitHub repo via the GitHub Contents API,
-  using `ADMIN_GITHUB_TOKEN`. Vercel then redeploys automatically, same as
-  any other push to `main`.
+- Every change commits directly to this GitHub repo via the GitHub Contents
+  API, using `ADMIN_GITHUB_TOKEN`. Vercel then redeploys automatically, same
+  as any other push to `main`.
 - Nothing here touches or requires touching `assets/i18n.js` (the site's
-  shared translation dictionary) — hiding/showing a card just wraps its
-  existing markup in an HTML comment and can always restore it byte-for-byte.
+  large shared translation dictionary). Show/Hide just wraps a card's
+  existing markup in an HTML comment (always restorable byte-for-byte).
+  Admin-created blog posts are fully self-contained instead: they carry
+  their own English/Arabic text inline via two small, generic, dictionary-free
+  mechanisms in `assets/i18n.js` (`data-lang="en"|"ar"` to show/hide a whole
+  block, and `data-lang-en="..."`/`data-lang-ar="..."` to swap a short
+  string like a title or date) — reusable by any future self-contained page,
+  not just blog posts.
+- Blog-post body text is converted from plain text to HTML by a small,
+  deliberately limited "lite markdown" — every character is HTML-escaped
+  before any tag is wrapped around it, so it can never emit raw/unescaped
+  markup regardless of what's typed in.
